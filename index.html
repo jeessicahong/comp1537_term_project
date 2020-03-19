@@ -42,25 +42,79 @@
 	        </button>
 	      </div>
 	      <form>
-	          <div class="form-group">
-	            <label for="Play Against" class="col-form-label">Play Against:</label><br>
-	            <input type="radio" id="Player" name="gameSelect" value="player">
-				<label for="player">Player</label><br>
-				<input type="radio" id="Computer" name="gameSelect" value="computer">
-				<label for="computer">Computer</label><br>
-	          </div>
-	          <div class="form-group">
+	      <div class="modal-body">
+	      	<div class="form-group">
+	            <label class="col-form-label">Play Against:</label><br>	         
+	            <div class="form-check">
+				  <input class="form-check-input" type="radio" name="gameSelect" id="PvP" value="PvP" checked onclick="formPlayerSelected()">
+				  <label class="form-check-label" for="PvP">Player</label>
+				</div>		
+				<div class="form-check">
+				  <input class="form-check-input" type="radio" name="gameSelect" id="PvE" value="PvE" onclick="formComputerSelected()">
+				  <label class="form-check-label" for="PvE">Computer</label>
+				</div>		
+	        </div>
+	        <div class="form-group formComputer">
+	        	<label class="col-form-label">Computer Difficulty:</label><br>
+	            <div class="form-check">
+				  <input class="form-check-input" type="radio" name="difficultySelect" id="Easy" value="Easy" checked>
+				  <label class="form-check-label" for="Easy">Easy</label>
+				</div>
+				<div class="form-check">
+				  <input class="form-check-input" type="radio" name="difficultySelect" id="Hard" value="Hard">
+				  <label class="form-check-label" for="Hard">Hard</label>
+				</div>
+	        </div>
+	        <div class="form-group">
 	            <label for="Player One Name" class="col-form-label">Player One Name:</label>
 	            <input type="text" class="form-control" id="p-one-name">
-	          </div>
-	          <div class="form-group">
+	        </div>	             
+	        <div class="form-group formSecondPlayer" >
 	            <label for="Player Two Name" class="col-form-label">Player Two Name:</label>
 	            <input type="text" class="form-control" id="p-two-name">
-	          </div>
+	        </div>
+	        <div class="form-group">
+	        	<img class="avatars" src="images/oddish.png" title="oddish">
+	        	<img class="avatars" src="images/snorlax.png" title="snorlax">
+	        	<img class="avatars" src="images/ditto.png" title="ditto">
+	        	<img class="avatars" src="images/eevee.png" title="eevee">
+	        	<img class="avatars" src="images/ghastly.png" title="ghastly">
+	        	<img class="avatars" src="images/meowth.png" title="meowth">
+	        	<img class="avatars" src="images/pikachu.png" title="pikachu">
+	        	<img class="avatars" src="images/pokeball.png" title="pokeball">	       	
+	        </div>
+	        <div class="form-group">
+	        	<label class="col-form-label">Player One Avatar:</label>
+	        	<select id="firstAvatar" class="custom-select">
+				  <option value="0" selected>Oddish</option>
+				  <option value="1">Snorlax</option>
+				  <option value="2">Ditto</option>
+				  <option value="3">Eevee</option>
+				  <option value="4">Ghastly</option>
+				  <option value="5">Meowth</option>
+				  <option value="6">Pikachu</option>
+				  <option value="7">Pokeball</option>
+				</select>
+	        </div>
+	         <div class="form-group formSecondPlayer">
+	        	<label class="col-form-label">Player Two Avatar:</label>
+	        	<select id="secondAvatar" class="custom-select">
+				  <option value="0">Oddish</option>
+				  <option value="1" selected>Snorlax</option>
+				  <option value="2">Ditto</option>
+				  <option value="3">Eevee</option>
+				  <option value="4">Ghastly</option>
+				  <option value="5">Meowth</option>
+				  <option value="6">Pikachu</option>
+				  <option value="7">Pokeball</option>
+				</select>
+	        </div>
+	        <div id="imageNotice">Pokemon icons made by <a href="https://www.flaticon.com/authors/darius-dan" title="Darius Dan">Darius Dan</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>	   
+	      </div>	          
     	  </form>
 	      <div class="modal-footer">
 	        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-	        <button type="button" class="btn btn-primary">Save changes</button>
+	        <button type="button" class="btn btn-primary" onclick="saveSettings()">Save changes</button>
 	      </div>
 	    </div>
 	  </div>

@@ -1,7 +1,16 @@
 let turns = 1;
 let firstPlayerTurn = true;
-let firstPlayerLogo = 'X';
-let secondPlayerLogo = 'O';
+
+let avatarSrcArray = [
+"images/oddish.png", "images/snorlax.png", "images/ditto.png", "images/eevee.png", 
+"images/ghastly.png", "images/meowth.png", "images/pikachu.png", "images/pokeball.png"
+]
+let firstPlayerLogoSrc;
+let secondPlayerLogoSrc;
+let gameMode;
+
+let firstPlayerName;
+let secondPlayerName;
 
 // keeps track of the total score for each possible winning combination
 let firstPlayerMoves = [0, 0, 0, 0, 0, 0, 0, 0];
@@ -30,28 +39,36 @@ function loadGame() {
 }
 
 function startGame() {
-	document.getElementById("displayMessage").innerHTML = "First Player's Turn";
+	document.getElementById("displayMessage").innerHTML = firstPlayerName + "'s Turn";
 }
 
 // first player starts with X
 function cellClicked(cell, cell_num) {
+	let firstPlayerLogo = document.createElement('img');
+	firstPlayerLogo.className="avatars";
+	firstPlayerLogo.src=firstPlayerLogoSrc;
+
+	let secondPlayerLogo = document.createElement('img');
+	secondPlayerLogo.className="avatars";
+	secondPlayerLogo.src=secondPlayerLogoSrc;
+
 	// continue updating table until there are 9 moves (there are 9 squares in tic tac toe)
 	if (turns < 10){
 		if (!firstPlayerTurn){
-			cell.innerHTML = secondPlayerLogo;
+			cell.appendChild(secondPlayerLogo);
 			cell.onclick="";
 			for (let i = 0; i < movesMap[cell_num].length; i++){
 				secondPlayerMoves[i] += movesMap[cell_num][i]
 			}
-			document.getElementById("displayMessage").innerHTML = "First Player's Turn";
+			document.getElementById("displayMessage").innerHTML = firstPlayerName + "'s Turn";
 		}
 		else {
-			cell.innerHTML = firstPlayerLogo;
+			cell.appendChild(firstPlayerLogo);
 			cell.onclick="";
 			for (let i = 0; i < movesMap[cell_num].length; i++){
 				firstPlayerMoves[i] += movesMap[cell_num][i]
 			}
-			document.getElementById("displayMessage").innerHTML = "Second Player's Turn";
+			document.getElementById("displayMessage").innerHTML = secondPlayerName + "'s Turn";
 		}		
 		
 	}
@@ -65,20 +82,20 @@ function checkFinish() {
 	if (turns > 4 && turns < 10) {
 		if (firstPlayerTurn) {
 			if (firstPlayerMoves.includes(3)) {
-				document.getElementById("displayMessage").innerHTML = "First Player Wins!";
+				document.getElementById("displayMessage").innerHTML = firstPlayerName + " Wins!";
 				endGame();
 			}
 		}
 		else {
 			if (secondPlayerMoves.includes(3)) {
-				document.getElementById("displayMessage").innerHTML = "Second Player Wins!";
+				document.getElementById("displayMessage").innerHTML = secondPlayerName + " Wins!";
 				endGame();
 			}
 		}
 	}
 	else if (turns == 10){
 		if (firstPlayerMoves.includes(3)) {
-				document.getElementById("displayMessage").innerHTML = "First Player Wins!";
+				document.getElementById("displayMessage").innerHTML = firstPlayerName + " Wins!";
 				endGame();
 		}
 		else {
@@ -109,4 +126,41 @@ function endGame() {
 			table.rows[i].cells[j].onclick=""
 		}
 	}
+}
+
+function formComputerSelected() {
+	secondPlayerFormElements = document.getElementsByClassName("formSecondPlayer");
+	for (let i = 0; i < secondPlayerFormElements.length; i++){
+		secondPlayerFormElements[i].style.display = "none";
+	}	
+	computerFormElements = document.getElementsByClassName("formComputer");
+	for (let i = 0; i < computerFormElements.length; i++){
+		computerFormElements[i].style.display = "block";
+	}	
+}
+
+function formPlayerSelected() {
+	// unhide all form elements that may have been hidden when "Computer" is selected
+	secondPlayerFormElements = document.getElementsByClassName("formSecondPlayer");
+	for (let i = 0; i < secondPlayerFormElements.length; i++){
+		secondPlayerFormElements[i].style.display = "";
+	}	
+	computerFormElements = document.getElementsByClassName("formComputer");
+	for (let i = 0; i < computerFormElements.length; i++){
+		computerFormElements[i].style.display = "none";
+	}	
+}
+
+function saveSettings() {
+	let firstPlayerAvatar = document.getElementById("firstAvatar");
+	firstPlayerLogoSrc = avatarSrcArray[firstPlayerAvatar.options.selectedIndex]
+
+	let secondPlayerAvatar = document.getElementById("secondAvatar");
+	secondPlayerLogoSrc = avatarSrcArray[secondPlayerAvatar.options.selectedIndex]
+
+	firstPlayerName = document.getElementById("p-one-name").value;
+	secondPlayerName = document.getElementById("p-two-name").value;
+
+	$('#gameSettings').modal('hide');
+	resetGame();
 }

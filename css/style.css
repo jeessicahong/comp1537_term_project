@@ -17,6 +17,15 @@ table {
 	text-align:center;
 }
 
+.avatars {
+	width:100px;
+	height:100px;
+}
+
+.formComputer {
+	display:none;
+}
+
 #resetWrapper {	
 	position: absolute;
 	bottom: 5%;
@@ -38,4 +47,8 @@ table {
 
 #displayMessage {
 	text-align: center;
+}
+
+#imageNotice {
+	font-size:12px;
 }
