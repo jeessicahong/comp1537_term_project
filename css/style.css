@@ -1,0 +1,29 @@
+td.bottomBorder {
+	border-bottom: 1px solid black;
+}
+
+td.leftBorder {
+	border-left: 1px solid black;
+}
+
+td {
+	height:100px;
+}
+
+table {
+	width:300px;
+	height:300px;
+	table-layout:fixed;
+	text-align:center;
+}
+
+#tableDiv {
+	bottom: 25%;
+	left: 50%;
+	position: absolute;
+	transform: translate(-50%, -50%);
+}
+
+#displayMessage {
+	text-align: center;
+}
