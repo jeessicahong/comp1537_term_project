@@ -8,9 +8,12 @@ let avatarSrcArray = [
 let firstPlayerLogoSrc = avatarSrcArray[0];
 let secondPlayerLogoSrc = avatarSrcArray[1];
 let gameMode;
+let isComputerTurn = false;
 
 let firstPlayerName = "Player One";
 let secondPlayerName = "Player Two";
+
+let totalMovesList = [];
 
 // keeps track of the total score for each possible winning combination
 let firstPlayerMoves = [0, 0, 0, 0, 0, 0, 0, 0];
@@ -51,7 +54,6 @@ function cellClicked(cell, cell_num) {
 	let secondPlayerLogo = document.createElement('img');
 	secondPlayerLogo.className="avatars";
 	secondPlayerLogo.src=secondPlayerLogoSrc;
-
 	// continue updating table until there are 9 moves (there are 9 squares in tic tac toe)
 	if (turns < 10){
 		if (!firstPlayerTurn){
@@ -68,13 +70,53 @@ function cellClicked(cell, cell_num) {
 			for (let i = 0; i < movesMap[cell_num].length; i++){
 				firstPlayerMoves[i] += movesMap[cell_num][i]
 			}
+			totalMovesList.push(cell_num);
 			document.getElementById("displayMessage").innerHTML = secondPlayerName + "'s Turn";
-		}		
-		
+		}
+		turns++;
+		let gameFinished = checkFinish();
+		firstPlayerTurn = !firstPlayerTurn;
+		if (!gameFinished) {
+			if (gameMode == "PvE" && !firstPlayerTurn){
+				isComputerTurn = true;
+				toggleOnClicks();
+				setTimeout(computerTurn, 1000);
+			}
+		}			
+	}	
+}
+
+function toggleOnClicks() {
+	if (isComputerTurn){
+		// disable
+		for (let i = 0; i < 9; i++){
+			if (!totalMovesList.includes(i)) {
+				let cell = document.getElementById(i.toString());
+				cell.onclick="";
+			}
+		}
+	} 
+	else {
+		// enable
+		for (let i = 0; i < 9; i++){
+			if (!totalMovesList.includes(i)) {
+				let cell = document.getElementById(i.toString());
+				cell.onclick = function() {cellClicked(this, i)};
+			}
+		}
 	}
-	turns++;
-	checkFinish();
-	firstPlayerTurn = !firstPlayerTurn;
+}
+
+function computerTurn() {
+	let computerMove = Math.floor(Math.random() * 9);
+	while (totalMovesList.includes(computerMove)){
+		computerMove = Math.floor(Math.random() * 9);
+	}
+	let cell = document.getElementById(computerMove.toString());
+	cellClicked(cell, computerMove);
+	totalMovesList.push(computerMove);
+	isComputerTurn = false;
+	toggleOnClicks();
 }
 
 // call this function after every move
@@ -84,12 +126,14 @@ function checkFinish() {
 			if (firstPlayerMoves.includes(3)) {
 				document.getElementById("displayMessage").innerHTML = firstPlayerName + " Wins!";
 				endGame();
+				return true;
 			}
 		}
 		else {
 			if (secondPlayerMoves.includes(3)) {
 				document.getElementById("displayMessage").innerHTML = secondPlayerName + " Wins!";
 				endGame();
+				return true;
 			}
 		}
 	}
@@ -97,10 +141,12 @@ function checkFinish() {
 		if (firstPlayerMoves.includes(3)) {
 				document.getElementById("displayMessage").innerHTML = firstPlayerName + " Wins!";
 				endGame();
+				return true;
 		}
 		else {
 			document.getElementById("displayMessage").innerHTML = "Game ended in a Draw!";
 			endGame();
+			return true;
 		}
 	}
 }
@@ -108,7 +154,7 @@ function checkFinish() {
 function resetGame() {
 	for (let i = 0; i < 3; i++){
 		for (let j = 0; j < 3; j++){
-			table.rows[i].cells[j].innerHTML = "";
+			table.rows[i].cells[j].innerHTML = "";			
 			table.rows[i].cells[j].onclick= function() {cellClicked(this, i*3 + j)}
 		}
 	}
@@ -116,6 +162,8 @@ function resetGame() {
 	secondPlayerMoves = [0, 0, 0, 0, 0, 0, 0, 0];
 	turns = 1;
 	firstPlayerTurn = true;
+	totalMovesList = []
+	isComputerTurn = false;
 	startGame();
 }
 
@@ -158,9 +206,22 @@ function saveSettings() {
 	let secondPlayerAvatar = document.getElementById("secondAvatar");
 	secondPlayerLogoSrc = avatarSrcArray[secondPlayerAvatar.options.selectedIndex]
 
-	firstPlayerName = document.getElementById("p-one-name").value;
-	secondPlayerName = document.getElementById("p-two-name").value;
+	if (document.getElementById("p-one-name").value != ""){
+		firstPlayerName = document.getElementById("p-one-name").value;
+	}
+	
+	gameMode = document.querySelector('input[name="gameSelect"]:checked').value;
+	if (gameMode == "PvP"){
+		if (document.getElementById("p-two-name").value != ""){
+			secondPlayerName = document.getElementById("p-two-name").value;
+		}
+		
+	}
+	else {
+		secondPlayerName = "Computer";
+	}
 
 	$('#gameSettings').modal('hide');
 	resetGame();
 }
+
