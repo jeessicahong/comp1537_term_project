@@ -159,7 +159,14 @@ function saveSettings() {
 	secondPlayerLogoSrc = avatarSrcArray[secondPlayerAvatar.options.selectedIndex]
 
 	firstPlayerName = document.getElementById("p-one-name").value;
-	secondPlayerName = document.getElementById("p-two-name").value;
+	
+	gameMode = document.querySelector('input[name="gameSelect"]:checked').value;
+	if (gameMode == "PvP"){
+		secondPlayerName = document.getElementById("p-two-name").value;
+	}
+	else {
+		secondPlayerName = "Computer";
+	}
 
 	$('#gameSettings').modal('hide');
 	resetGame();
