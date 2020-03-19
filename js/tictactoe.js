@@ -185,6 +185,8 @@ function formComputerSelected() {
 	for (let i = 0; i < computerFormElements.length; i++){
 		computerFormElements[i].style.display = "block";
 	}	
+	let secondAvatarLabel = document.getElementById("secondAvatarLabel");
+	secondAvatarLabel.innerHTML = "Computer Avatar:";
 }
 
 function formPlayerSelected() {
@@ -197,6 +199,8 @@ function formPlayerSelected() {
 	for (let i = 0; i < computerFormElements.length; i++){
 		computerFormElements[i].style.display = "none";
 	}	
+	let secondAvatarLabel = document.getElementById("secondAvatarLabel");
+	secondAvatarLabel.innerHTML = "Player Two Avatar:";
 }
 
 function saveSettings() {
@@ -209,13 +213,18 @@ function saveSettings() {
 	if (document.getElementById("p-one-name").value != ""){
 		firstPlayerName = document.getElementById("p-one-name").value;
 	}
+	else {
+		firstPlayerName = "Player One";
+	}
 	
 	gameMode = document.querySelector('input[name="gameSelect"]:checked').value;
 	if (gameMode == "PvP"){
 		if (document.getElementById("p-two-name").value != ""){
 			secondPlayerName = document.getElementById("p-two-name").value;
 		}
-		
+		else {
+			secondPlayerName = "Player Two";
+		}		
 	}
 	else {
 		secondPlayerName = "Computer";
