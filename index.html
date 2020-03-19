@@ -8,7 +8,9 @@
 <body>
 	<div>
 		<p id="displayMessage"></p>
+		<button id="settingButton" type="button" class="btn btn-primary" data-toggle="modal" data-target="#gameSettings">Change Game Settings</button>
 	</div>
+	
 	<div id="tableDiv">
 		<table id="ticTable">
 			<tr>
@@ -28,6 +30,42 @@
 			</tr>
 		</table>
 	</div>	
+
+	<!-- Modal -->
+	<div class="modal fade" id="gameSettings" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	  <div class="modal-dialog" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <h5 class="modal-title" id="exampleModalLabel">Game Settings</h5>
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	          <span aria-hidden="true">&times;</span>
+	        </button>
+	      </div>
+	      <form>
+	          <div class="form-group">
+	            <label for="Play Against" class="col-form-label">Play Against:</label><br>
+	            <input type="radio" id="Player" name="gameSelect" value="player">
+				<label for="player">Player</label><br>
+				<input type="radio" id="Computer" name="gameSelect" value="computer">
+				<label for="computer">Computer</label><br>
+	          </div>
+	          <div class="form-group">
+	            <label for="Player One Name" class="col-form-label">Player One Name:</label>
+	            <input type="text" class="form-control" id="p-one-name">
+	          </div>
+	          <div class="form-group">
+	            <label for="Player Two Name" class="col-form-label">Player Two Name:</label>
+	            <input type="text" class="form-control" id="p-two-name">
+	          </div>
+    	  </form>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+	        <button type="button" class="btn btn-primary">Save changes</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+
 	<div id="resetWrapper">
 		<input id = "resetButton" value="Reset Game" title="Reset Game" type="submit" class="button" onclick="resetGame()"> 
 	</div>
