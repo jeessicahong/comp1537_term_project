@@ -5,12 +5,12 @@ let avatarSrcArray = [
 "images/oddish.png", "images/snorlax.png", "images/ditto.png", "images/eevee.png", 
 "images/ghastly.png", "images/meowth.png", "images/pikachu.png", "images/pokeball.png"
 ]
-let firstPlayerLogoSrc;
-let secondPlayerLogoSrc;
+let firstPlayerLogoSrc = avatarSrcArray[0];
+let secondPlayerLogoSrc = avatarSrcArray[1];
 let gameMode;
 
-let firstPlayerName;
-let secondPlayerName;
+let firstPlayerName = "Player One";
+let secondPlayerName = "Player Two";
 
 // keeps track of the total score for each possible winning combination
 let firstPlayerMoves = [0, 0, 0, 0, 0, 0, 0, 0];
