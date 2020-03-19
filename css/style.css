@@ -25,6 +25,10 @@ table {
 	margin: 0 auto;	
 }
 
+#settingButton {
+	float:right;
+}
+
 #tableDiv {
 	bottom: 25%;
 	left: 50%;
