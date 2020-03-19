@@ -20,8 +20,14 @@ let movesMap = {
     "8": [0, 0, 1, 0, 0, 1, 1, 0]    
 }
 let table = document.getElementById("ticTable");
+let gameSettings = document.getElementById("gameSettings")
 
-window.addEventListener("load", startGame);
+window.addEventListener("load", loadGame);
+
+function loadGame() {
+	$('#gameSettings').modal('show');
+	startGame();
+}
 
 function startGame() {
 	document.getElementById("displayMessage").innerHTML = "First Player's Turn";
