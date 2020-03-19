@@ -21,14 +21,14 @@ let movesMap = {
 }
 let table = document.getElementById("ticTable");
 
+window.addEventListener("load", startGame);
 
 function startGame() {
-
+	document.getElementById("displayMessage").innerHTML = "First Player's Turn";
 }
 
 // first player starts with X
 function cellClicked(cell, cell_num) {
-	console.log(turns, firstPlayerTurn);
 	// continue updating table until there are 9 moves (there are 9 squares in tic tac toe)
 	if (turns < 10){
 		if (!firstPlayerTurn){
@@ -51,8 +51,6 @@ function cellClicked(cell, cell_num) {
 	}
 	turns++;
 	checkFinish();
-	console.log(firstPlayerMoves);
-	console.log(secondPlayerMoves);
 	firstPlayerTurn = !firstPlayerTurn;
 }
 
@@ -78,18 +76,31 @@ function checkFinish() {
 				endGame();
 		}
 		else {
-			document.getElementById("displayMessage").innerHTML = "Game Over!";
+			document.getElementById("displayMessage").innerHTML = "Game ended in a Draw!";
+			endGame();
 		}
 	}
 }
 
+function resetGame() {
+	for (let i = 0; i < 3; i++){
+		for (let j = 0; j < 3; j++){
+			table.rows[i].cells[j].innerHTML = "";
+			table.rows[i].cells[j].onclick= function() {cellClicked(this, i*3 + j)}
+		}
+	}
+	firstPlayerMoves = [0, 0, 0, 0, 0, 0, 0, 0];
+	secondPlayerMoves = [0, 0, 0, 0, 0, 0, 0, 0];
+	turns = 1;
+	firstPlayerTurn = true;
+	startGame();
+}
+
 function endGame() {
+	// Make sure no more moves can be made
 	for (let i = 0; i < 3; i++){
 		for (let j = 0; j < 3; j++){
 			table.rows[i].cells[j].onclick=""
 		}
 	}
-
-	// wait for button to play again
-	// startGame()
 }
