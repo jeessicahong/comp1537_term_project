@@ -1,17 +1,20 @@
 <!DOCTYPE html>
 <html>
 <head>
+	<meta charset="utf-8">
+  	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" type="text/css" href="css/style.css">
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 </head>
 
 <body>
-	<div>
-		<p id="displayMessage"></p>
-		<button id="settingButton" type="button" class="btn btn-primary" data-toggle="modal" data-target="#gameSettings">Change Game Settings</button>
-	</div>
+	<div class="container">
+		<div id="button-container">
+			<button id="settingButton" type="button" class="btn btn-primary btn-md" data-toggle="modal" data-target="#gameSettings">Change Game Settings</button>
+		</div>
 	
 	<div id="tableDiv">
+		<h3 id="displayMessage"></h3>
 		<table id="ticTable">
 			<tr>
 				<td id="0" onclick="cellClicked(this, 0)" class="bottomBorder"></td>
@@ -29,12 +32,12 @@
 				<td id="8" onclick="cellClicked(this, 8)" class="leftBorder"></td>
 			</tr>
 		</table>
-	</div>	
+	</div>
 
 	<!-- Modal -->
-	<div class="modal fade" id="gameSettings" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-	  <div class="modal-dialog" role="document">
-	    <div class="modal-content">
+	<div class="modal fade" id="gameSettings" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static">
+	  <div class="modal-dialog modal-dialog-centered" role="document">
+	    <div class="modal-content modal-fluid">
 	      <div class="modal-header">
 	        <h5 class="modal-title" id="exampleModalLabel">Game Settings</h5>
 	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -44,7 +47,7 @@
 	      <form>
 	      <div class="modal-body">
 	      	<div class="form-group">
-	            <label class="col-form-label">Play Against:</label><br>	         
+	            <label class="col-form-label"><b>Play Against:</b></label><br>	         
 	            <div class="form-check">
 				  <input class="form-check-input" type="radio" name="gameSelect" id="PvP" value="PvP" checked onclick="formPlayerSelected()">
 				  <label class="form-check-label" for="PvP">Player</label>
@@ -66,11 +69,11 @@
 				</div>
 	        </div>
 	        <div class="form-group">
-	            <label for="Player One Name" class="col-form-label">Player One Name:</label>
+	            <label for="Player One Name" class="col-form-label"><b>Player One Name:</b></label>
 	            <input type="text" class="form-control" id="p-one-name" placeholder="Player One">
 	        </div>	             
 	        <div class="form-group formSecondPlayer" >
-	            <label for="Player Two Name" class="col-form-label">Player Two Name:</label>
+	            <label for="Player Two Name" class="col-form-label"><b>Player Two Name:</b></label>
 	            <input type="text" class="form-control" id="p-two-name" placeholder="Player Two">
 	        </div>
 	        <div class="form-group">
@@ -84,7 +87,7 @@
 	        	<img class="avatars" src="images/pokeball.png" title="pokeball">	       	
 	        </div>
 	        <div class="form-group">
-	        	<label class="col-form-label">Player One Avatar:</label>
+	        	<label class="col-form-label"><b>Player One Avatar:</b></label>
 	        	<select id="firstAvatar" class="custom-select">
 				  <option value="0" selected>Oddish</option>
 				  <option value="1">Snorlax</option>
@@ -96,8 +99,8 @@
 				  <option value="7">Pokeball</option>
 				</select>
 	        </div>
-	         <div class="form-group">
-	        	<label id="secondAvatarLabel" class="col-form-label">Player Two Avatar:</label>
+	         <div class="form-group formSecondPlayer">
+	        	<label class="col-form-label"><b>Player Two Avatar:</b></label>
 	        	<select id="secondAvatar" class="custom-select">
 				  <option value="0">Oddish</option>
 				  <option value="1" selected>Snorlax</option>
@@ -120,8 +123,9 @@
 	  </div>
 	</div>
 
-	<div id="resetWrapper">
-		<input id = "resetButton" value="Reset Game" title="Reset Game" type="submit" class="button" onclick="resetGame()"> 
+	<div class="fixed-bottom text-center" id="resetWrapper">
+		<input id = "resetButton" value="Reset Game" title="Reset Game" type="submit" class="button btn btn-secondary" onclick="resetGame()"> 
+	</div>
 	</div>
 
 
