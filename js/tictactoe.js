@@ -12,7 +12,7 @@ let firstPlayerLogoSrc = avatarSrcArray[0];
 let secondPlayerLogoSrc = avatarSrcArray[1];
 
 // Store the type of game. Either PvP or PvE
-let gameMode;
+let gameMode = '';
 
 // Flag to track and disable onclick functions when it is computer's turn
 let isComputerTurn = false;
@@ -232,7 +232,6 @@ function resetGame() {
 	firstPlayerTurn = true;
 	totalMovesList = []
 	isComputerTurn = false;
-	resetScore();
 	startGame();
 }
 
@@ -301,19 +300,28 @@ function saveSettings() {
 	else {
 		firstPlayerName = "Player One";
 	}
-	
-	// Set the second player name based on game mode
+
+	// track the gameMode before it gets changed by user
+	let oldGameMode = gameMode;
+
+	//Set the second player name based on game mode
 	gameMode = document.querySelector('input[name="gameSelect"]:checked').value;
+
 	if (gameMode == "PvP"){
 		if (document.getElementById("p-two-name").value != ""){
 			secondPlayerName = document.getElementById("p-two-name").value;
 		}
 		else {
 			secondPlayerName = "Player Two";
-		}		
+		}
 	}
 	else {
 		secondPlayerName = "Computer";
+	}
+
+	//reset the score if gameMode changed
+	if (checkGameMode(oldGameMode, gameMode)) {
+		resetScore();
 	}
 
 	$('#gameSettings').modal('hide');
@@ -329,6 +337,11 @@ function incrementScore(playerCurrentScore) {
 
 // reset score
 function resetScore() {
-	player2Score.innerText = "0";
-	player1Score.innerText = "0";
+		player2Score.innerText = "0";
+		player1Score.innerText = "0";
+}
+
+// check if game mode changed
+function checkGameMode(oldMode, newMode) {
+	return (oldMode === newMode) ? false : true;
 }
