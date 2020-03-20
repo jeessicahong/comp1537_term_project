@@ -45,7 +45,11 @@ let movesMap = {
 let table = document.getElementById("ticTable");
 let gameSettings = document.getElementById("gameSettings")
 
-// Run the loadGame function when the page is loaded
+// Store score element
+const player1Score = document.getElementById("player1Score");
+const player2Score = document.getElementById("player2Score");
+
+//Run the loadGame function when the page is loaded
 window.addEventListener("load", loadGame);
 
 function loadGame() {
@@ -181,6 +185,7 @@ function checkFinish() {
 			if (firstPlayerMoves.includes(3)) {
 				document.getElementById("displayMessage").innerHTML = firstPlayerName + " Wins!";
 				endGame();
+				incrementScore(player1Score);
 				return true;
 			}
 		}
@@ -188,6 +193,7 @@ function checkFinish() {
 			if (secondPlayerMoves.includes(3)) {
 				document.getElementById("displayMessage").innerHTML = secondPlayerName + " Wins!";
 				endGame();
+				incrementScore(player2Score);
 				return true;
 			}
 		}
@@ -226,6 +232,7 @@ function resetGame() {
 	firstPlayerTurn = true;
 	totalMovesList = []
 	isComputerTurn = false;
+	resetScore();
 	startGame();
 }
 
@@ -313,3 +320,15 @@ function saveSettings() {
 	resetGame();
 }
 
+// increment the player scores
+
+function incrementScore(playerCurrentScore) {
+	newScore = parseInt(playerCurrentScore.innerText) + 1
+	playerCurrentScore.innerText = newScore;
+}
+
+// reset score
+function resetScore() {
+	player2Score.innerText = "0";
+	player1Score.innerText = "0";
+}
