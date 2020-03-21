@@ -13,6 +13,7 @@ let secondPlayerLogoSrc = avatarSrcArray[1];
 
 // Store the type of game. Either PvP or PvE
 let gameMode = '';
+let gameDifficulty = '';
 
 // Flag to track and disable onclick functions when it is computer's turn
 let isComputerTurn = false;
@@ -155,13 +156,24 @@ function toggleOnClicks() {
 
 // Function to handle computer logic
 function computerTurn() {
-	// Randomly choose a cell in the table
-	let computerMove = Math.floor(Math.random() * 9);
-	
-	// Check that the chosen cell hasn't already been selected
-	while (totalMovesList.includes(computerMove)){
-		computerMove = Math.floor(Math.random() * 9);
+	if (gameDifficulty == "Easy") {
+
+		// Randomly choose a cell in the table
+		let computerMove = Math.floor(Math.random() * 9);
+		
+		// Check that the chosen cell hasn't already been selected
+		while (totalMovesList.includes(computerMove)){
+			computerMove = Math.floor(Math.random() * 9);
+		}
 	}
+
+	else {
+		let two_index = firstPlayerMoves.IndexOf(2)
+		if (firstPlayerMoves.IndexOf(2)) {
+			if (two)
+		}
+	}
+		
 
 	// Get the cell element and pass to cellClicked function
 	let cell = document.getElementById(computerMove.toString());
@@ -306,6 +318,8 @@ function saveSettings() {
 
 	//Set the second player name based on game mode
 	gameMode = document.querySelector('input[name="gameSelect"]:checked').value;
+
+	gameDifficulty = document.querySelector('input[name="difficultySelect"]:checked').value;
 
 	if (gameMode == "PvP"){
 		if (document.getElementById("p-two-name").value != ""){
