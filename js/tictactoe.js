@@ -189,7 +189,7 @@ function computerTurn() {
 				}
 			}
 		}
-	}
+	
 		
 	// Get the cell element and pass to cellClicked function
 	let cell = document.getElementById(computerMove.toString());
@@ -201,7 +201,9 @@ function computerTurn() {
 	// Re-enable the onclicks
 	isComputerTurn = false;
 	toggleOnClicks();
+
 }
+
 
 // Check if a winning combination or the table is filled
 function checkFinish() {
