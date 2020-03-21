@@ -1,40 +1,49 @@
 <!DOCTYPE html>
 <html>
 <head>
+	<meta charset="utf-8">
+  	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" type="text/css" href="css/style.css">
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 </head>
 
 <body>
-	<div>
-		<p id="displayMessage"></p>
-		<button id="settingButton" type="button" class="btn btn-primary" data-toggle="modal" data-target="#gameSettings">Change Game Settings</button>
-	</div>
+	<div class="container">
+		<div id="button-container">
+			<button id="settingButton" type="button" class="btn btn-primary btn-md" data-toggle="modal" data-target="#gameSettings">Change Game Settings</button>
+		</div>
 	
 	<div id="tableDiv">
+		<h3 id="displayMessage"></h3>
 		<table id="ticTable">
 			<tr>
-				<td onclick="cellClicked(this, 0)" class="bottomBorder"></td>
-				<td onclick="cellClicked(this, 1)" class="bottomBorder leftBorder"></td>
-				<td onclick="cellClicked(this, 2)" class="bottomBorder leftBorder"></td>
+				<td id="0" onclick="cellClicked(this, 0)" class="bottomBorder"></td>
+				<td id="1" onclick="cellClicked(this, 1)" class="bottomBorder leftBorder"></td>
+				<td id="2" onclick="cellClicked(this, 2)" class="bottomBorder leftBorder"></td>
 			</tr>
 			<tr>
-				<td onclick="cellClicked(this, 3)" class="bottomBorder"></td>
-				<td onclick="cellClicked(this, 4)" class="bottomBorder leftBorder"></td>
-				<td onclick="cellClicked(this, 5)" class="bottomBorder leftBorder"></td>
+				<td id="3" onclick="cellClicked(this, 3)" class="bottomBorder"></td>
+				<td id="4" onclick="cellClicked(this, 4)" class="bottomBorder leftBorder"></td>
+				<td id="5" onclick="cellClicked(this, 5)" class="bottomBorder leftBorder"></td>
 			</tr>
 			<tr>
-				<td onclick="cellClicked(this, 6)"></td>
-				<td onclick="cellClicked(this, 7)" class="leftBorder"></td>
-				<td onclick="cellClicked(this, 8)" class="leftBorder"></td>
+				<td id="6" onclick="cellClicked(this, 6)"></td>
+				<td id="7" onclick="cellClicked(this, 7)" class="leftBorder"></td>
+				<td id="8" onclick="cellClicked(this, 8)" class="leftBorder"></td>
 			</tr>
 		</table>
-	</div>	
+	</div>
+
+	<!-- SCORE TRACKER -->
+	<div id="scoreDiv">
+		<p id="player1">Player 1 Score: <span id="player1Score">0</span></p>
+		<p id="player2">Player 2 Score: <span id="player2Score">0</span></p>
+	</div>
 
 	<!-- Modal -->
-	<div class="modal fade" id="gameSettings" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-	  <div class="modal-dialog" role="document">
-	    <div class="modal-content">
+	<div class="modal fade" id="gameSettings" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static">
+	  <div class="modal-dialog modal-dialog-centered" role="document">
+	    <div class="modal-content modal-fluid">
 	      <div class="modal-header">
 	        <h5 class="modal-title" id="exampleModalLabel">Game Settings</h5>
 	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -42,32 +51,87 @@
 	        </button>
 	      </div>
 	      <form>
-	          <div class="form-group">
-	            <label for="Play Against" class="col-form-label">Play Against:</label><br>
-	            <input type="radio" id="Player" name="gameSelect" value="player">
-				<label for="player">Player</label><br>
-				<input type="radio" id="Computer" name="gameSelect" value="computer">
-				<label for="computer">Computer</label><br>
-	          </div>
-	          <div class="form-group">
-	            <label for="Player One Name" class="col-form-label">Player One Name:</label>
-	            <input type="text" class="form-control" id="p-one-name">
-	          </div>
-	          <div class="form-group">
-	            <label for="Player Two Name" class="col-form-label">Player Two Name:</label>
-	            <input type="text" class="form-control" id="p-two-name">
-	          </div>
+	      <div class="modal-body">
+	      	<div class="form-group">
+	            <label class="col-form-label"><b>Play Against:</b></label><br>	         
+	            <div class="form-check">
+				  <input class="form-check-input" type="radio" name="gameSelect" id="PvP" value="PvP" checked onclick="formPlayerSelected()">
+				  <label class="form-check-label" for="PvP">Player</label>
+				</div>		
+				<div class="form-check">
+				  <input class="form-check-input" type="radio" name="gameSelect" id="PvE" value="PvE" onclick="formComputerSelected()">
+				  <label class="form-check-label" for="PvE">Computer</label>
+				</div>		
+	        </div>
+	        <div class="form-group formComputer">
+	        	<label class="col-form-label">Computer Difficulty:</label><br>
+	            <div class="form-check">
+				  <input class="form-check-input" type="radio" name="difficultySelect" id="Easy" value="Easy" checked>
+				  <label class="form-check-label" for="Easy">Easy</label>
+				</div>
+				<div class="form-check">
+				  <input class="form-check-input" type="radio" name="difficultySelect" id="Hard" value="Hard">
+				  <label class="form-check-label" for="Hard">Hard</label>
+				</div>
+	        </div>
+	        <div class="form-group">
+	            <label for="Player One Name" class="col-form-label"><b>Player One Name:</b></label>
+	            <input type="text" class="form-control" id="p-one-name" placeholder="Player One">
+	        </div>	             
+	        <div class="form-group formSecondPlayer" >
+	            <label for="Player Two Name" class="col-form-label"><b>Player Two Name:</b></label>
+	            <input type="text" class="form-control" id="p-two-name" placeholder="Player Two">
+	        </div>
+	        <div class="form-group">
+	        	<img class="avatars" src="images/oddish.png" title="oddish">
+	        	<img class="avatars" src="images/snorlax.png" title="snorlax">
+	        	<img class="avatars" src="images/ditto.png" title="ditto">
+	        	<img class="avatars" src="images/eevee.png" title="eevee">
+	        	<img class="avatars" src="images/ghastly.png" title="ghastly">
+	        	<img class="avatars" src="images/meowth.png" title="meowth">
+	        	<img class="avatars" src="images/pikachu.png" title="pikachu">
+	        	<img class="avatars" src="images/pokeball.png" title="pokeball">	       	
+	        </div>
+	        <div class="form-group">
+	        	<label class="col-form-label"><b>Player One Avatar:</b></label>
+	        	<select id="firstAvatar" class="custom-select">
+				  <option value="0" selected>Oddish</option>
+				  <option value="1">Snorlax</option>
+				  <option value="2">Ditto</option>
+				  <option value="3">Eevee</option>
+				  <option value="4">Ghastly</option>
+				  <option value="5">Meowth</option>
+				  <option value="6">Pikachu</option>
+				  <option value="7">Pokeball</option>
+				</select>
+	        </div>
+	         <div class="form-group">
+	        	<label id="secondAvatarLabel" class="col-form-label"><b>Player Two Avatar:</b></label>
+	        	<select id="secondAvatar" class="custom-select">
+				  <option value="0">Oddish</option>
+				  <option value="1" selected>Snorlax</option>
+				  <option value="2">Ditto</option>
+				  <option value="3">Eevee</option>
+				  <option value="4">Ghastly</option>
+				  <option value="5">Meowth</option>
+				  <option value="6">Pikachu</option>
+				  <option value="7">Pokeball</option>
+				</select>
+	        </div>
+	        <div id="imageNotice">Pokemon icons made by <a href="https://www.flaticon.com/authors/darius-dan" title="Darius Dan">Darius Dan</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>	   
+	      </div>	          
     	  </form>
 	      <div class="modal-footer">
 	        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-	        <button type="button" class="btn btn-primary">Save changes</button>
+	        <button type="button" class="btn btn-primary" onclick="saveSettings()">Save changes</button>
 	      </div>
 	    </div>
 	  </div>
 	</div>
 
-	<div id="resetWrapper">
-		<input id = "resetButton" value="Reset Game" title="Reset Game" type="submit" class="button" onclick="resetGame()"> 
+	<div class="fixed-bottom text-center" id="resetWrapper">
+		<input id = "resetButton" value="Reset Game" title="Reset Game" type="submit" class="button btn btn-secondary" onclick="resetGame()"> 
+	</div>
 	</div>
 
 

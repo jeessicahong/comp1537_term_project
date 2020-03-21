@@ -178,13 +178,12 @@ function computerTurn() {
 			6: [0, 4, 8],
 			7: [2, 4, 6]
 		}
-		console.log(Object.keys(winComboCells).length);
 
 		let two_index = firstPlayerMoves.IndexOf(2);
 			if (two_index != -1) {
-				for (let cell = 0; cell < Object.keys(winComboCells).length ; cell++) {
-					if (!totalMovesList.includes(cell)) {
-						computerMove = cell;
+				for (let i = 0; i < 7; i++) {
+					if (!totalMovesList.includes(i)) {
+						computerMove = i;
 					}
 				}
 			}
@@ -204,6 +203,28 @@ function computerTurn() {
 
 }
 
+
+// Function to handle computer logic
+function computerTurn() {
+	// Randomly choose a cell in the table
+	let computerMove = Math.floor(Math.random() * 9);
+	
+	// Check that the chosen cell hasn't already been selected
+	while (totalMovesList.includes(computerMove)){
+		computerMove = Math.floor(Math.random() * 9);
+	}
+
+	// Get the cell element and pass to cellClicked function
+	let cell = document.getElementById(computerMove.toString());
+	cellClicked(cell, computerMove);
+	
+	// Update the moves array
+	totalMovesList.push(computerMove);
+
+	// Re-enable the onclicks
+	isComputerTurn = false;
+	toggleOnClicks();
+}
 
 // Check if a winning combination or the table is filled
 function checkFinish() {

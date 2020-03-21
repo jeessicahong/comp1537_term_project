@@ -4,33 +4,69 @@ td.bottomBorder {
 
 td.leftBorder {
 	border-left: 1px solid black;
-}
+} 
 
 td {
-	height:100px;
+	width: 120px;
+	height: 120px;
 }
 
 table {
-	width:300px;
-	height:300px;
+	width: 300px;
+	height: 300px;
 	table-layout:fixed;
 	text-align:center;
 }
 
-#resetWrapper {	
-	position: absolute;
-	bottom: 5%;
-	left: 50%;
-	transform: translate(-50%, -50%);
-	margin: 0 auto;	
+.avatars {
+	width:100px;
+	height:100px;
+}
+
+.formComputer {
+	display:none;
+}
+
+.modal-header {
+	color: white;
+	background-color: red;
+}
+
+.form-check-input, .custom-select, .avatars {
+	cursor: pointer;
 }
 
 #settingButton {
-	float:right;
+	position: absolute;
+	top: 2%;
+	left: 85%;
+	text-transform: uppercase;
+	font-weight: 400;
+}
+
+#settingButton:hover {
+	background-color: lightgrey;
+	color: grey;
+	border: 1px solid white;
+}
+
+#resetButton {
+	background-color: grey;
+	border: 1px solid white;
+	border-radius: 5px;
+}
+
+#resetButton:hover {
+	background-color: lightgrey;
+	color: grey;
+}
+
+#resetWrapper {
+	padding-bottom: 0.5%;
 }
 
 #tableDiv {
-	bottom: 25%;
+	top: 40%;
 	left: 50%;
 	position: absolute;
 	transform: translate(-50%, -50%);
@@ -38,4 +74,49 @@ table {
 
 #displayMessage {
 	text-align: center;
+	padding-bottom: 20px;
+}
+
+#imageNotice {
+	font-size:12px;
+}
+
+@media only screen and (max-width: 600px) {
+	table {
+		width: 90vw;
+		height: 70vh;
+		table-layout: auto;
+	}
+
+	td {
+		width: 50vw;
+	}
+
+	td .avatars {
+		display: block;
+		width: 100%;
+		height: 100%;
+	}
+
+	#resetButton {
+		width: 40%;
+	}
+
+	#button-container {
+		text-align: center;
+	}
+
+	#settingButton {
+		position: absolute;
+		top: 0%;
+		left: 0%;
+		padding: 2%;
+		width: 100vw
+	}
+
+	#tableDiv {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+	}
 }
