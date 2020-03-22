@@ -156,10 +156,12 @@ function toggleOnClicks() {
 
 // Function to handle computer logic
 function computerTurn() {
+	let computerMove;
+	
 	if (gameDifficulty == "Easy") {
 
 		// Randomly choose a cell in the table
-		let computerMove = Math.floor(Math.random() * 9);
+		computerMove = Math.floor(Math.random() * 9);
 		
 		// Check that the chosen cell hasn't already been selected
 		while (totalMovesList.includes(computerMove)){
@@ -180,7 +182,6 @@ function computerTurn() {
 		};
 		
 		let two_index = firstPlayerMoves.indexOf(2);
-		console.log(winningCombos[two_index].length());
 
 		if (two_index != -1) {
 			for (let i = 0; i < 3; i++) {
@@ -190,7 +191,6 @@ function computerTurn() {
 			}
 		}
 	}
-	
 		
 	// Get the cell element and pass to cellClicked function
 	let cell = document.getElementById(computerMove.toString());
@@ -203,29 +203,6 @@ function computerTurn() {
 	isComputerTurn = false;
 	toggleOnClicks();
 
-}
-
-
-// Function to handle computer logic
-function computerTurn() {
-	// Randomly choose a cell in the table
-	let computerMove = Math.floor(Math.random() * 9);
-	
-	// Check that the chosen cell hasn't already been selected
-	while (totalMovesList.includes(computerMove)){
-		computerMove = Math.floor(Math.random() * 9);
-	}
-
-	// Get the cell element and pass to cellClicked function
-	let cell = document.getElementById(computerMove.toString());
-	cellClicked(cell, computerMove);
-	
-	// Update the moves array
-	totalMovesList.push(computerMove);
-
-	// Re-enable the onclicks
-	isComputerTurn = false;
-	toggleOnClicks();
 }
 
 // Check if a winning combination or the table is filled
