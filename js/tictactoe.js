@@ -287,11 +287,23 @@ function formPlayerSelected() {
 // Handle updates to Game Settings
 function saveSettings() {
 	// Set the avatars based on user selection
-	let firstPlayerAvatar = document.getElementById("firstAvatar");
-	firstPlayerLogoSrc = avatarSrcArray[firstPlayerAvatar.options.selectedIndex]
+	let firstPlayerAvatar = document.getElementById("pl1");
+	firstPlayerIndex = firstPlayerAvatar.options.selectedIndex;
 
-	let secondPlayerAvatar = document.getElementById("secondAvatar");
-	secondPlayerLogoSrc = avatarSrcArray[secondPlayerAvatar.options.selectedIndex]
+	if (firstPlayerIndex != 0) {
+		firstPlayerLogoSrc = avatarSrcArray[firstPlayerAvatar.options.selectedIndex - 1]
+	} else {
+		firstPlayerLogoSrc = avatarSrcArray[0];
+	}
+	
+	let secondPlayerAvatar = document.getElementById("pl2");
+	secondPlayerIndex = secondPlayerAvatar.options.selectedIndex;
+
+	if (secondPlayerIndex != 0) {
+		secondPlayerLogoSrc = avatarSrcArray[secondPlayerAvatar.options.selectedIndex - 1]
+	} else {
+		secondPlayerLogoSrc = avatarSrcArray[1];
+	}
 
 	// Set the names based on user input
 	if (document.getElementById("p-one-name").value != ""){
@@ -344,4 +356,24 @@ function resetScore() {
 // check if game mode changed
 function checkGameMode(oldMode, newMode) {
 	return (oldMode === newMode) ? false : true;
+}
+
+// function to ensure 2 players can't have the same avatar
+function checkAvatar() {
+  dropdownValues = [];
+
+  for (let index = 0; index < 2 ; index++) {
+    dropdownValues[index] = document.getElementById('pl'+(index+1)).value;
+	}
+  
+  for (let index = 0; index < 2; index++) {
+    for (let value = 1; value < 9; value++) {
+    document.getElementById('pl'+(index+1)).options[value].style.display = "block";
+      for (let c = 0; c < 4; c++) {
+        if(document.getElementById('pl'+(index+1)).options[value].value == dropdownValues[c]) {
+          document.getElementById('pl'+(index+1)).options[value].style.display = "none";
+        }
+      }
+    }
+  }
 }
