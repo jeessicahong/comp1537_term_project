@@ -42,9 +42,6 @@ let movesMap = {
     "7": [0, 0, 1, 0, 1, 0, 0, 0],
     "8": [0, 0, 1, 0, 0, 1, 1, 0]    
 }
-let indexCount = -1;
-// twosInFirstPlayer = all 2s index in firstPlayerMoves
-let twosInFirstPlayer = [];
 
 // Store references to DOM elements
 let table = document.getElementById("ticTable");
@@ -158,12 +155,11 @@ function toggleOnClicks() {
 	}
 }
 
+
 // Function to handle computer logic
 function computerTurn() {
 	let computerMove;
-
 	if (gameDifficulty == "Easy") {
-
 		// Randomly choose a cell in the table
 		computerMove = Math.floor(Math.random() * 9);
 		
@@ -185,44 +181,45 @@ function computerTurn() {
 			6: [0, 4, 8],
 			7: [2, 4, 6]
 		};
-		// twosInFirstPlayer = index of 2s in firstPlayerMoves
-		for (let i = 0; i < 8; i++) {
-			if (firstPlayerMoves[i] == 2) {
-				if (!twosInFirstPlayer.includes(i)) {
-					twosInFirstPlayer.push(i);
-				}
-			}
-		}
-
-		// When no move matched a winning pattern
-		if (twosInFirstPlayer.length == 0) {		
-
-			// Randomly choose a cell in the table
-			computerMove = Math.floor(Math.random() * 9);
-			
-			// Check that the chosen cell hasn't already been selected
-			while (totalMovesList.includes(computerMove)){
-				computerMove = Math.floor(Math.random() * 9);
-			}
-		}
 		
-		// Matched at least 1 winning combos
-		else {
-			let two_index = twosInFirstPlayer[indexCount];
-			console.log("twosInFirstPlayer: "+twosInFirstPlayer);
-			console.log("indexCount: "+indexCount);
-			console.log("two_index: "+two_index)
-			for (let i = 0; i < 3; i++) {
-				if (!totalMovesList.includes(winningCombos[two_index][i])) {
-					computerMove = winningCombos[two_index][i];
+		// keep a track of the last index so we can look for the next occurrence of 2 if needed
+		let two_index_count = 1;
+		
+		// Continue trying to find a move until one is calculated
+		while (computerMove == undefined){
+			
+			// use last_index to help search for the next index of 2 if the previous one is already filled
+			let last_index = -1;
+			
+			// get the next index of 2 in firstPlayerMoves array
+			for (let i = 0; i < two_index_count; i++) {
+				last_index = firstPlayerMoves.indexOf(2, last_index + 1);
+			}
 
-					while (totalMovesList.includes(computerMove)){
-						computerMove = Math.floor(Math.random() * 9);
-					}
+			let two_index = last_index;
+			// If 2 is not found or all the existing 2's are already filled
+			if (two_index == -1) {
+				// Randomly choose a cell in the table
+				computerMove = Math.floor(Math.random() * 9);
+				
+				// Check that the chosen cell hasn't already been selected
+				while (totalMovesList.includes(computerMove)){
+					computerMove = Math.floor(Math.random() * 9);
 				}
 			}
-		}
-		indexCount++;
+			// If there is a 2, determine if it is already filled
+			// If it is filled, computerMove will be undefined
+			// If it is not filled, we will get the correct blocking cell for computerMove
+			else {
+				for (let i = 0; i < 3; i++){
+					if (!totalMovesList.includes(winningCombos[two_index][i])){
+						computerMove = winningCombos[two_index][i];
+					}
+				}		
+			}
+			two_index_count++;
+		}		
+	}
 		
 	// Get the cell element and pass to cellClicked function
 	let cell = document.getElementById(computerMove.toString());
@@ -234,8 +231,6 @@ function computerTurn() {
 	// Re-enable the onclicks
 	isComputerTurn = false;
 	toggleOnClicks();
-	}
-	console.log("end round")
 }
 
 // Check if a winning combination or the table is filled
