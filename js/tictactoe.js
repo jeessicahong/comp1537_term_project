@@ -168,7 +168,7 @@ function computerTurn() {
 	}
 
 	else {
-		let winComboCells = {
+		const winningCombos = {
 			0: [0, 1, 2],
 			1: [3, 4, 5],
 			2: [6, 7, 8],
@@ -177,17 +177,19 @@ function computerTurn() {
 			5: [2, 5, 8],
 			6: [0, 4, 8],
 			7: [2, 4, 6]
-		}
+		};
+		
+		let two_index = firstPlayerMoves.indexOf(2);
+		console.log(winningCombos[two_index].length());
 
-		let two_index = firstPlayerMoves.IndexOf(2);
-			if (two_index != -1) {
-				for (let i = 0; i < 7; i++) {
-					if (!totalMovesList.includes(i)) {
-						computerMove = i;
-					}
+		if (two_index != -1) {
+			for (let i = 0; i < 3; i++) {
+				if (!totalMovesList.includes(winningCombos[two_index][i])) {
+					computerMove = winningCombos[two_index][i];
 				}
 			}
 		}
+	}
 	
 		
 	// Get the cell element and pass to cellClicked function
