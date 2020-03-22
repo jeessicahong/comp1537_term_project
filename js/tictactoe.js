@@ -42,6 +42,10 @@ let movesMap = {
     "7": [0, 0, 1, 0, 1, 0, 0, 0],
     "8": [0, 0, 1, 0, 0, 1, 1, 0]    
 }
+let indexCount = -1;
+// twosInFirstPlayer = all 2s index in firstPlayerMoves
+let twosInFirstPlayer = [];
+
 // Store references to DOM elements
 let table = document.getElementById("ticTable");
 let gameSettings = document.getElementById("gameSettings")
@@ -157,7 +161,7 @@ function toggleOnClicks() {
 // Function to handle computer logic
 function computerTurn() {
 	let computerMove;
-	
+
 	if (gameDifficulty == "Easy") {
 
 		// Randomly choose a cell in the table
@@ -168,8 +172,9 @@ function computerTurn() {
 			computerMove = Math.floor(Math.random() * 9);
 		}
 	}
-
+	// Hard Mode:
 	else {
+		// [row1, row2, row3, col1, col2, col3, diag1, diag2]
 		const winningCombos = {
 			0: [0, 1, 2],
 			1: [3, 4, 5],
@@ -180,17 +185,44 @@ function computerTurn() {
 			6: [0, 4, 8],
 			7: [2, 4, 6]
 		};
-		
-		let two_index = firstPlayerMoves.indexOf(2);
-
-		if (two_index != -1) {
-			for (let i = 0; i < 3; i++) {
-				if (!totalMovesList.includes(winningCombos[two_index][i])) {
-					computerMove = winningCombos[two_index][i];
+		// twosInFirstPlayer = index of 2s in firstPlayerMoves
+		for (let i = 0; i < 8; i++) {
+			if (firstPlayerMoves[i] == 2) {
+				if (!twosInFirstPlayer.includes(i)) {
+					twosInFirstPlayer.push(i);
 				}
 			}
 		}
-	}
+
+		// When no move matched a winning pattern
+		if (twosInFirstPlayer.length == 0) {		
+
+			// Randomly choose a cell in the table
+			computerMove = Math.floor(Math.random() * 9);
+			
+			// Check that the chosen cell hasn't already been selected
+			while (totalMovesList.includes(computerMove)){
+				computerMove = Math.floor(Math.random() * 9);
+			}
+		}
+		
+		// Matched at least 1 winning combos
+		else {
+			let two_index = twosInFirstPlayer[indexCount];
+			console.log("twosInFirstPlayer: "+twosInFirstPlayer);
+			console.log("indexCount: "+indexCount);
+			console.log("two_index: "+two_index)
+			for (let i = 0; i < 3; i++) {
+				if (!totalMovesList.includes(winningCombos[two_index][i])) {
+					computerMove = winningCombos[two_index][i];
+
+					while (totalMovesList.includes(computerMove)){
+						computerMove = Math.floor(Math.random() * 9);
+					}
+				}
+			}
+		}
+		indexCount++;
 		
 	// Get the cell element and pass to cellClicked function
 	let cell = document.getElementById(computerMove.toString());
@@ -202,7 +234,8 @@ function computerTurn() {
 	// Re-enable the onclicks
 	isComputerTurn = false;
 	toggleOnClicks();
-
+	}
+	console.log("end round")
 }
 
 // Check if a winning combination or the table is filled
@@ -377,3 +410,4 @@ function resetScore() {
 function checkGameMode(oldMode, newMode) {
 	return (oldMode === newMode) ? false : true;
 }
+
