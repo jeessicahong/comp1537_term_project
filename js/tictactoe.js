@@ -50,6 +50,8 @@ let gameSettings = document.getElementById("gameSettings")
 // Store score element
 const player1Score = document.getElementById("player1Score");
 const player2Score = document.getElementById("player2Score");
+const player1ScoreDiv = document.getElementById("player1ScoreDiv");
+const player2ScoreDiv = document.getElementById("player2ScoreDiv");
 
 //Run the loadGame function when the page is loaded
 window.addEventListener("load", loadGame);
@@ -345,15 +347,32 @@ function formPlayerSelected() {
 // Handle updates to Game Settings
 function saveSettings() {
 	// Set the avatars based on user selection
-	let firstPlayerAvatar = document.getElementById("firstAvatar");
-	firstPlayerLogoSrc = avatarSrcArray[firstPlayerAvatar.options.selectedIndex]
+	let firstPlayerAvatar = document.getElementById("pl1");
+	firstPlayerIndex = firstPlayerAvatar.options.selectedIndex;
 
-	let secondPlayerAvatar = document.getElementById("secondAvatar");
-	secondPlayerLogoSrc = avatarSrcArray[secondPlayerAvatar.options.selectedIndex]
+	if (firstPlayerIndex != 0) {
+		firstPlayerLogoSrc = avatarSrcArray[firstPlayerAvatar.options.selectedIndex - 1]
+		updatePlayerAvatarScoreTracker(player1ScoreDiv, firstPlayerLogoSrc);
+	} else {
+		firstPlayerLogoSrc = avatarSrcArray[0];
+		updatePlayerAvatarScoreTracker(player1ScoreDiv, firstPlayerLogoSrc);
+	}
+	
+	let secondPlayerAvatar = document.getElementById("pl2");
+	secondPlayerIndex = secondPlayerAvatar.options.selectedIndex;
+
+	if (secondPlayerIndex != 0) {
+		secondPlayerLogoSrc = avatarSrcArray[secondPlayerAvatar.options.selectedIndex - 1]
+		updatePlayerAvatarScoreTracker(player2ScoreDiv, secondPlayerLogoSrc);
+	} else {
+		secondPlayerLogoSrc = avatarSrcArray[1];
+		updatePlayerAvatarScoreTracker(player2ScoreDiv, secondPlayerLogoSrc);
+	}
 
 	// Set the names based on user input
 	if (document.getElementById("p-one-name").value != ""){
 		firstPlayerName = document.getElementById("p-one-name").value;
+		document.getElementById("player1Name").innerText = `${document.getElementById("p-one-name").value}'s`;
 	}
 	else {
 		firstPlayerName = "Player One";
@@ -370,6 +389,7 @@ function saveSettings() {
 	if (gameMode == "PvP"){
 		if (document.getElementById("p-two-name").value != ""){
 			secondPlayerName = document.getElementById("p-two-name").value;
+			document.getElementById("player2Name").innerText = `${document.getElementById('p-two-name').value}'s`;
 		}
 		else {
 			secondPlayerName = "Player Two";
@@ -377,6 +397,7 @@ function saveSettings() {
 	}
 	else {
 		secondPlayerName = "Computer";
+		document.getElementById("player2Name").innerText = "Computer's";
 	}
 
 	//reset the score if gameMode changed
@@ -401,8 +422,46 @@ function resetScore() {
 		player1Score.innerText = "0";
 }
 
-// check if game mode changed
+// check if game mode changed for reseting of the score
 function checkGameMode(oldMode, newMode) {
 	return (oldMode === newMode) ? false : true;
 }
 
+// function to ensure 2 players can't have the same avatar
+function checkAvatar() {
+  dropdownValues = [];
+
+  for (let index = 0; index < 2 ; index++) {
+    dropdownValues[index] = document.getElementById('pl'+(index+1)).value;
+	}
+  
+  for (let index = 0; index < 2; index++) {
+    for (let value = 1; value < 9; value++) {
+    document.getElementById('pl'+(index+1)).options[value].style.display = "block";
+      for (let c = 0; c < 4; c++) {
+        if(document.getElementById('pl'+(index+1)).options[value].value == dropdownValues[c]) {
+          document.getElementById('pl'+(index+1)).options[value].style.display = "none";
+        }
+      }
+    }
+  }
+}
+
+// function to update image on the score tracker
+function updatePlayerAvatarScoreTracker(parentElement, image) {
+	
+	if(parentElement.querySelector("img") == null) {
+		console.log(parentElement);
+		imageElement = document.createElement("img");
+		imageElement.className = "scoreImg";
+		imageElement.src = image;
+		parentElement.insertBefore(imageElement, parentElement.childNodes[1]);
+	} else {
+		parentElement.removeChild(parentElement.childNodes[1]);
+		console.log(parentElement);
+		imageElement = document.createElement("img");
+		imageElement.className = "scoreImg";
+		imageElement.src = image;
+		parentElement.insertBefore(imageElement, parentElement.childNodes[1]);
+	}
+}

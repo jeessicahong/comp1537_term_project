@@ -35,9 +35,15 @@
 	</div>
 
 	<!-- SCORE TRACKER -->
-	<div id="scoreDiv">
-		<p id="player1">Player 1 Score: <span id="player1Score">0</span></p>
-		<p id="player2">Player 2 Score: <span id="player2Score">0</span></p>
+	<div id="scoreDivs">
+		
+		<div id="player1ScoreDiv" class="scoreDiv">
+			<p><span id="player1Name">Player One</span> Score: <span id="player1Score">0</span></p>
+		</div>
+		
+		<div id="player2ScoreDiv" class="scoreDiv">
+			<p><span id="player2Name">Player Two</span> Score: <span id="player2Score">0</span></p>
+		</div>
 	</div>
 
 	<!-- Modal -->
@@ -92,33 +98,38 @@
 	        	<img class="avatars" src="images/pikachu.png" title="pikachu">
 	        	<img class="avatars" src="images/pokeball.png" title="pokeball">	       	
 	        </div>
-	        <div class="form-group">
+					
+					<div class="form-group">
 	        	<label class="col-form-label"><b>Player One Avatar:</b></label>
-	        	<select id="firstAvatar" class="custom-select">
-				  <option value="0" selected>Oddish</option>
-				  <option value="1">Snorlax</option>
-				  <option value="2">Ditto</option>
-				  <option value="3">Eevee</option>
-				  <option value="4">Ghastly</option>
-				  <option value="5">Meowth</option>
-				  <option value="6">Pikachu</option>
-				  <option value="7">Pokeball</option>
-				</select>
+	        	<select id="pl1" class="custom-select" onchange="checkAvatar()">
+								<option value="0" selected>Default</option>
+								<option value="1">Oddish</option>
+								<option value="2">Snorlax</option>
+								<option value="3">Ditto</option>
+								<option value="4">Eevee</option>
+								<option value="5">Ghastly</option>
+								<option value="6">Meowth</option>
+								<option value="7">Pikachu</option>
+								<option value="8">Pokeball</option>
+					</select>
 	        </div>
-	         <div class="form-group">
+					
+					<div class="form-group">
 	        	<label id="secondAvatarLabel" class="col-form-label"><b>Player Two Avatar:</b></label>
-	        	<select id="secondAvatar" class="custom-select">
-				  <option value="0">Oddish</option>
-				  <option value="1" selected>Snorlax</option>
-				  <option value="2">Ditto</option>
-				  <option value="3">Eevee</option>
-				  <option value="4">Ghastly</option>
-				  <option value="5">Meowth</option>
-				  <option value="6">Pikachu</option>
-				  <option value="7">Pokeball</option>
-				</select>
+	        	<select id="pl2" class="custom-select" onchange="checkAvatar()">
+							<option value="0">Default</option>
+							<option value="1">Oddish</option>
+							<option value="2">Snorlax</option>
+							<option value="3">Ditto</option>
+							<option value="4">Eevee</option>
+							<option value="5">Ghastly</option>
+							<option value="6">Meowth</option>
+							<option value="7">Pikachu</option>
+							<option value="8">Pokeball</option>
+					</select>
 	        </div>
-	        <div id="imageNotice">Pokemon icons made by <a href="https://www.flaticon.com/authors/darius-dan" title="Darius Dan">Darius Dan</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>	   
+					
+					<div id="imageNotice">Pokemon icons made by <a href="https://www.flaticon.com/authors/darius-dan" title="Darius Dan">Darius Dan</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>	   
 	      </div>	          
     	  </form>
 	      <div class="modal-footer">
