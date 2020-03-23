@@ -18,6 +18,9 @@ let gameDifficulty = '';
 // Flag to track and disable onclick functions when it is computer's turn
 let isComputerTurn = false;
 
+// Boolean to track whether the game is finished or not
+let gameFinished;
+
 // Set default string for the names
 let firstPlayerName = "Player One";
 let secondPlayerName = "Player Two";
@@ -117,7 +120,7 @@ function cellClicked(cell, cell_num) {
 		turns++;
 
 		// Check if the game has finished 
-		let gameFinished = checkFinish();
+		gameFinished = checkFinish();
 
 		// Change the boolean for which turn it is
 		firstPlayerTurn = !firstPlayerTurn;
@@ -230,9 +233,11 @@ function computerTurn() {
 	// Update the moves array
 	totalMovesList.push(computerMove);
 
-	// Re-enable the onclicks
-	isComputerTurn = false;
-	toggleOnClicks();
+	if (!gameFinished){
+		// Re-enable the onclicks
+		isComputerTurn = false;
+		toggleOnClicks();
+	}	
 }
 
 // Check if a winning combination or the table is filled
@@ -273,6 +278,7 @@ function checkFinish() {
 			return true;
 		}
 	}
+	return false;
 }
 
 // Function that resets all variables to their default values
