@@ -42,6 +42,7 @@ let movesMap = {
     "7": [0, 0, 1, 0, 1, 0, 0, 0],
     "8": [0, 0, 1, 0, 0, 1, 1, 0]    
 }
+
 // Store references to DOM elements
 let table = document.getElementById("ticTable");
 let gameSettings = document.getElementById("gameSettings")
@@ -154,27 +155,72 @@ function toggleOnClicks() {
 	}
 }
 
+
 // Function to handle computer logic
 function computerTurn() {
+	let computerMove;
 	if (gameDifficulty == "Easy") {
-
 		// Randomly choose a cell in the table
-		let computerMove = Math.floor(Math.random() * 9);
+		computerMove = Math.floor(Math.random() * 9);
 		
 		// Check that the chosen cell hasn't already been selected
 		while (totalMovesList.includes(computerMove)){
 			computerMove = Math.floor(Math.random() * 9);
 		}
 	}
-
+	// Hard Mode:
 	else {
-		let two_index = firstPlayerMoves.IndexOf(2)
-		if (firstPlayerMoves.IndexOf(2)) {
-			if (two)
-		}
+		// [row1, row2, row3, col1, col2, col3, diag1, diag2]
+		const winningCombos = {
+			0: [0, 1, 2],
+			1: [3, 4, 5],
+			2: [6, 7, 8],
+			3: [0, 3, 6],
+			4: [1, 4, 7],
+			5: [2, 5, 8],
+			6: [0, 4, 8],
+			7: [2, 4, 6]
+		};
+		
+		// keep a track of the last index so we can look for the next occurrence of 2 if needed
+		let two_index_count = 1;
+		
+		// Continue trying to find a move until one is calculated
+		while (computerMove == undefined){
+			
+			// use last_index to help search for the next index of 2 if the previous one is already filled
+			let last_index = -1;
+			
+			// get the next index of 2 in firstPlayerMoves array
+			for (let i = 0; i < two_index_count; i++) {
+				last_index = firstPlayerMoves.indexOf(2, last_index + 1);
+			}
+
+			let two_index = last_index;
+			// If 2 is not found or all the existing 2's are already filled
+			if (two_index == -1) {
+				// Randomly choose a cell in the table
+				computerMove = Math.floor(Math.random() * 9);
+				
+				// Check that the chosen cell hasn't already been selected
+				while (totalMovesList.includes(computerMove)){
+					computerMove = Math.floor(Math.random() * 9);
+				}
+			}
+			// If there is a 2, determine if it is already filled
+			// If it is filled, computerMove will be undefined
+			// If it is not filled, we will get the correct blocking cell for computerMove
+			else {
+				for (let i = 0; i < 3; i++){
+					if (!totalMovesList.includes(winningCombos[two_index][i])){
+						computerMove = winningCombos[two_index][i];
+					}
+				}		
+			}
+			two_index_count++;
+		}		
 	}
 		
-
 	// Get the cell element and pass to cellClicked function
 	let cell = document.getElementById(computerMove.toString());
 	cellClicked(cell, computerMove);
@@ -359,3 +405,4 @@ function resetScore() {
 function checkGameMode(oldMode, newMode) {
 	return (oldMode === newMode) ? false : true;
 }
+
