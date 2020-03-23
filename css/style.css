@@ -81,6 +81,17 @@ table {
 	font-size:12px;
 }
 
+/* SCORE TRACKER STYLES */
+
+.scoreImg {
+	width: 50px;
+	height: 50px;
+}
+
+.scoreDiv {
+	display: flex;
+}
+
 @media only screen and (max-width: 600px) {
 	table {
 		width: 90vw;
@@ -120,3 +131,4 @@ table {
 		left: 50%;
 	}
 }
+

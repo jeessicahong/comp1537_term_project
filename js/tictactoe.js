@@ -48,6 +48,8 @@ let gameSettings = document.getElementById("gameSettings")
 // Store score element
 const player1Score = document.getElementById("player1Score");
 const player2Score = document.getElementById("player2Score");
+const player1ScoreDiv = document.getElementById("player1ScoreDiv");
+const player2ScoreDiv = document.getElementById("player2ScoreDiv");
 
 //Run the loadGame function when the page is loaded
 window.addEventListener("load", loadGame);
@@ -292,8 +294,10 @@ function saveSettings() {
 
 	if (firstPlayerIndex != 0) {
 		firstPlayerLogoSrc = avatarSrcArray[firstPlayerAvatar.options.selectedIndex - 1]
+		updatePlayerAvatarScoreTracker(player1ScoreDiv, firstPlayerLogoSrc);
 	} else {
 		firstPlayerLogoSrc = avatarSrcArray[0];
+		updatePlayerAvatarScoreTracker(player1ScoreDiv, firstPlayerLogoSrc);
 	}
 	
 	let secondPlayerAvatar = document.getElementById("pl2");
@@ -301,13 +305,16 @@ function saveSettings() {
 
 	if (secondPlayerIndex != 0) {
 		secondPlayerLogoSrc = avatarSrcArray[secondPlayerAvatar.options.selectedIndex - 1]
+		updatePlayerAvatarScoreTracker(player2ScoreDiv, secondPlayerLogoSrc);
 	} else {
 		secondPlayerLogoSrc = avatarSrcArray[1];
+		updatePlayerAvatarScoreTracker(player2ScoreDiv, secondPlayerLogoSrc);
 	}
 
 	// Set the names based on user input
 	if (document.getElementById("p-one-name").value != ""){
 		firstPlayerName = document.getElementById("p-one-name").value;
+		document.getElementById("player1Name").innerText = `${document.getElementById("p-one-name").value}'s`;
 	}
 	else {
 		firstPlayerName = "Player One";
@@ -322,6 +329,7 @@ function saveSettings() {
 	if (gameMode == "PvP"){
 		if (document.getElementById("p-two-name").value != ""){
 			secondPlayerName = document.getElementById("p-two-name").value;
+			document.getElementById("player2Name").innerText = `${document.getElementById('p-two-name').value}'s`;
 		}
 		else {
 			secondPlayerName = "Player Two";
@@ -329,6 +337,7 @@ function saveSettings() {
 	}
 	else {
 		secondPlayerName = "Computer";
+		document.getElementById("player2Name").innerText = "Computer's";
 	}
 
 	//reset the score if gameMode changed
@@ -353,7 +362,7 @@ function resetScore() {
 		player1Score.innerText = "0";
 }
 
-// check if game mode changed
+// check if game mode changed for reseting of the score
 function checkGameMode(oldMode, newMode) {
 	return (oldMode === newMode) ? false : true;
 }
@@ -376,4 +385,23 @@ function checkAvatar() {
       }
     }
   }
+}
+
+// function to update image on the score tracker
+function updatePlayerAvatarScoreTracker(parentElement, image) {
+	
+	if(parentElement.querySelector("img") == null) {
+		console.log(parentElement);
+		imageElement = document.createElement("img");
+		imageElement.className = "scoreImg";
+		imageElement.src = image;
+		parentElement.insertBefore(imageElement, parentElement.childNodes[1]);
+	} else {
+		parentElement.removeChild(parentElement.childNodes[1]);
+		console.log(parentElement);
+		imageElement = document.createElement("img");
+		imageElement.className = "scoreImg";
+		imageElement.src = image;
+		parentElement.insertBefore(imageElement, parentElement.childNodes[1]);
+	}
 }
