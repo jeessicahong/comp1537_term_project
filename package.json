@@ -1,0 +1,23 @@
+{
+  "name": "comp1537_term_project",
+  "version": "1.0.0",
+  "description": "Kirk Wong  \r Vivienne Li  \r Lily Yang  \r Jessica Hong",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jeessicahong/comp1537_term_project.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jeessicahong/comp1537_term_project/issues"
+  },
+  "homepage": "https://github.com/jeessicahong/comp1537_term_project#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "socket.io": "^2.3.0"
+  }
+}
