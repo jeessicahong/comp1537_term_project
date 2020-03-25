@@ -464,10 +464,6 @@ function updatePlayerAvatarScoreTracker(parentElement, image) {
 		parentElement.insertBefore(imageElement, parentElement.childNodes[1]);
 	} else {
 		parentElement.removeChild(parentElement.childNodes[1]);
-		console.log(parentElement);
-		imageElement = document.createElement("img");
-		imageElement.className = "scoreImg";
-		imageElement.src = image;
-		parentElement.insertBefore(imageElement, parentElement.childNodes[1]);
+			updatePlayerAvatarScoreTracker(parentElement, image);
 	}
 }
