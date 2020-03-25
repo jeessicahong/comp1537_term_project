@@ -5,6 +5,8 @@
   	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" type="text/css" href="css/style.css">
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+	<link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
+	<title>Tic Tac Toe! -JKLV-</title>
 </head>
 
 <body>
@@ -35,16 +37,17 @@
 	</div>
 
 	<!-- SCORE TRACKER -->
-	<div id="scoreDivs">
-		
-		<div id="player1ScoreDiv" class="scoreDiv">
-			<p><span id="player1Name">Player One</span> Score: <span id="player1Score">0</span></p>
+	<div class="card" id="scoreDivs">
+		<div class="card-body" id="cardContent">
+		  <h5 class="card-title" id="scoreHeader">SCORE BOARD</h5>
+		  <div id="player1ScoreDiv" class="scoreDiv">
+			<p class="card-text"><span id="player1Name">Player One</span> Score: <span id="player1Score">0</span></p>
+		  </div>
+		  <div id="player2ScoreDiv" class="scoreDiv">
+			<p class="card-text"><span id="player2Name">Player Two</span> Score: <span id="player2Score">0</span></p>
+		  </div>
 		</div>
-		
-		<div id="player2ScoreDiv" class="scoreDiv">
-			<p><span id="player2Name">Player Two</span> Score: <span id="player2Score">0</span></p>
-		</div>
-	</div>
+	  </div>
 
 	<!-- Modal -->
 	<div class="modal fade" id="gameSettings" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static">

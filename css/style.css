@@ -1,3 +1,7 @@
+body {
+	background-image: url(../images/desktop_bg.png);
+}
+
 td.bottomBorder {
 	border-bottom: 1px solid black;
 }
@@ -9,6 +13,13 @@ td.leftBorder {
 td {
 	width: 120px;
 	height: 120px;
+	transition: all 0.3s;
+	background-color: rgba(255, 255, 255, 0.1);
+}
+
+td:hover {
+	cursor: pointer;
+	background-color: rgba(255, 255, 255, 0.5);
 }
 
 table {
@@ -81,11 +92,19 @@ table {
 	font-size:12px;
 }
 
+#scoreDivs {
+	width: 25%;
+	background-color: rgba(255, 255, 255, 0.3);
+	position: absolute;
+	left: 0%;
+}
+
 /* SCORE TRACKER STYLES */
 
 .scoreImg {
-	width: 50px;
-	height: 50px;
+	width: 10%;
+	height: 10%;
+	padding-right: 1%;
 }
 
 .scoreDiv {
@@ -114,21 +133,59 @@ table {
 	}
 
 	#button-container {
-		text-align: center;
+		position: absolute;
+		width: 45vw;
+		height: 20vw;
+		margin-left: 12%;
+		opacity: 50%;
 	}
 
-	#settingButton {
-		position: absolute;
-		top: 0%;
-		left: 0%;
-		padding: 2%;
-		width: 100vw
+	#button-container:hover {
+		opacity: 100%;
 	}
 
 	#tableDiv {
 		position: absolute;
 		top: 50%;
 		left: 50%;
+	}
+
+	#scoreDivs {
+		position: absolute;
+		top: 0%;
+		left: 0%;
+		font-size: 70%;
+		width: 50vw;
+		opacity: 50%;
+	}
+
+	#scoreDivs:hover  {
+		opacity: 100%;
+	}
+
+	#scoreHeader {
+		font-size: 120%;
+		margin-bottom: -0.25%;
+		margin-left: -3%;
+	}
+
+	#cardContent {
+		margin-top: -10%;
+		margin-bottom: -10%;
+	}
+
+	#displayMessage {
+		margin-top: 10%;
+	}
+
+	.scoreImg {
+		width: 15%;
+		height: 15%;
+		margin-left: -10%;
+	}
+
+	.card-text {
+		margin-left: -1%;
 	}
 }
 

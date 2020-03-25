@@ -95,7 +95,7 @@ function cellClicked(cell, cell_num) {
 				secondPlayerMoves[i] += movesMap[cell_num][i]
 			}
 			// Update the display message so that it's the next player's turn
-			document.getElementById("displayMessage").innerHTML = firstPlayerName + "'s Turn";
+			document.getElementById("displayMessage").innerHTML = "Go, " + firstPlayerName + "!";
 		}
 		// If it is first player's turn
 		else {
@@ -114,7 +114,7 @@ function cellClicked(cell, cell_num) {
 			totalMovesList.push(cell_num);
 
 			// Update the display message so that it's the next player's turn
-			document.getElementById("displayMessage").innerHTML = secondPlayerName + "'s Turn";
+			document.getElementById("displayMessage").innerHTML = "Go, " + secondPlayerName + "!";
 		}
 		// Increase the count for turns
 		turns++;
