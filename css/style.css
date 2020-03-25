@@ -93,7 +93,7 @@ table {
 }
 
 #scoreDivs {
-	width: 25%;
+	width: 15%;
 	background-color: rgba(255, 255, 255, 0.3);
 	position: absolute;
 	left: 0%;
@@ -185,7 +185,7 @@ table {
 	}
 
 	.card-text {
-		margin-left: -1%;
+		margin-left: 2%;
 	}
 }
 
