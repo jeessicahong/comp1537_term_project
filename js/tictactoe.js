@@ -245,7 +245,7 @@ function computerTurn() {
 // Check if a winning combination or the table is filled
 function checkFinish() {
 	// Can only have a winning combination after the 5th turn
-	if (turns > 4 && turns < 10) {
+	if (turns > 4 && turns < 10 ) {
 		// Depending on which player it is, if the associated array has 3 
 		// (it is a winning combination), then end the game
 		if (firstPlayerTurn) {
@@ -271,6 +271,7 @@ function checkFinish() {
 		if (firstPlayerMoves.includes(3)) {
 				document.getElementById("displayMessage").innerHTML = firstPlayerName + " Wins!";
 				endGame();
+				incrementScore(player1Score);
 				return true;
 		}
 		// If nobody has won...
