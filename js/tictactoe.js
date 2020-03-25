@@ -63,6 +63,8 @@ function loadGame() {
 	// Show the Game Settings when page is loaded
 	$('#gameSettings').modal('show');
 	startGame();
+	updatePlayerAvatarScoreTracker(player1ScoreDiv, firstPlayerLogoSrc);
+	updatePlayerAvatarScoreTracker(player2ScoreDiv, secondPlayerLogoSrc);
 }
 
 function startGame() {
