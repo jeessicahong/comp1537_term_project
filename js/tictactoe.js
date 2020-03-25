@@ -380,7 +380,7 @@ function saveSettings() {
 	// Set the names based on user input
 	if (document.getElementById("p-one-name").value != ""){
 		firstPlayerName = document.getElementById("p-one-name").value;
-		document.getElementById("player1Name").innerText = `${document.getElementById("p-one-name").value}'s`;
+		document.getElementById("player1Name").innerText = `${document.getElementById("p-one-name").value}`;
 	}
 	else {
 		firstPlayerName = "Player One";
@@ -397,7 +397,7 @@ function saveSettings() {
 	if (gameMode == "PvP"){
 		if (document.getElementById("p-two-name").value != ""){
 			secondPlayerName = document.getElementById("p-two-name").value;
-			document.getElementById("player2Name").innerText = `${document.getElementById('p-two-name').value}'s`;
+			document.getElementById("player2Name").innerText = `${document.getElementById('p-two-name').value}`;
 		}
 		else {
 			secondPlayerName = "Player Two";
@@ -405,7 +405,7 @@ function saveSettings() {
 	}
 	else {
 		secondPlayerName = "Computer";
-		document.getElementById("player2Name").innerText = "Computer's";
+		document.getElementById("player2Name").innerText = secondPlayerName;
 	}
 
 	//reset the score if gameMode changed
