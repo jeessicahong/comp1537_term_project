@@ -63,6 +63,8 @@ function loadGame() {
 	// Show the Game Settings when page is loaded
 	$('#gameSettings').modal('show');
 	startGame();
+	updatePlayerAvatarScoreTracker(player1ScoreDiv, firstPlayerLogoSrc);
+	updatePlayerAvatarScoreTracker(player2ScoreDiv, secondPlayerLogoSrc);
 }
 
 function startGame() {
@@ -378,7 +380,7 @@ function saveSettings() {
 	// Set the names based on user input
 	if (document.getElementById("p-one-name").value != ""){
 		firstPlayerName = document.getElementById("p-one-name").value;
-		document.getElementById("player1Name").innerText = `${document.getElementById("p-one-name").value}'s`;
+		document.getElementById("player1Name").innerText = `${document.getElementById("p-one-name").value}`;
 	}
 	else {
 		firstPlayerName = "Player One";
@@ -395,7 +397,7 @@ function saveSettings() {
 	if (gameMode == "PvP"){
 		if (document.getElementById("p-two-name").value != ""){
 			secondPlayerName = document.getElementById("p-two-name").value;
-			document.getElementById("player2Name").innerText = `${document.getElementById('p-two-name').value}'s`;
+			document.getElementById("player2Name").innerText = `${document.getElementById('p-two-name').value}`;
 		}
 		else {
 			secondPlayerName = "Player Two";
@@ -403,7 +405,7 @@ function saveSettings() {
 	}
 	else {
 		secondPlayerName = "Computer";
-		document.getElementById("player2Name").innerText = "Computer's";
+		document.getElementById("player2Name").innerText = secondPlayerName;
 	}
 
 	//reset the score if gameMode changed
@@ -464,10 +466,6 @@ function updatePlayerAvatarScoreTracker(parentElement, image) {
 		parentElement.insertBefore(imageElement, parentElement.childNodes[1]);
 	} else {
 		parentElement.removeChild(parentElement.childNodes[1]);
-		console.log(parentElement);
-		imageElement = document.createElement("img");
-		imageElement.className = "scoreImg";
-		imageElement.src = image;
-		parentElement.insertBefore(imageElement, parentElement.childNodes[1]);
+			updatePlayerAvatarScoreTracker(parentElement, image);
 	}
 }
