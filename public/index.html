@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Play Tic Tac Toe</title>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
+	</head>
+
+	<body>
+		<p>Welcome!</p>
+		<p id="notification"></p>
+		<form action="/play-local" method="post">
+			<button type="submit">Play Locally</button>
+		</form>
+		<form action="/create-room" method="post">
+			<input id="createRoom" name="roomName" type="text">
+			<button type='submit' onclick="createRoom()">Create Online Room</button>
+		</form>
+		<form action="/join-room" method="post">
+			<input id="joinRoom" type="text">
+			<button type='submit' onclick="joinRoom()">Join Online Room</button>
+		</form>
+
+		<script src="js/room.js"></script>
+	</body>
+</html>
