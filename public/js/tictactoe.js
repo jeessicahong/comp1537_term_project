@@ -75,6 +75,8 @@ function loadGame() {
 	// Show the Game Settings when page is loaded
 	$('#gameSettings').modal('show');
 	startGame();
+	updatePlayerAvatarScoreTracker(player1ScoreDiv, firstPlayerLogoSrc);
+	updatePlayerAvatarScoreTracker(player2ScoreDiv, secondPlayerLogoSrc);
 }
 
 function startGame() {
@@ -121,7 +123,7 @@ function cellClicked(cell_num, onlineUpdate) {
 				secondPlayerMoves[i] += movesMap[cell_num][i]
 			}
 			// Update the display message so that it's the next player's turn
-			document.getElementById("displayMessage").innerHTML = firstPlayerName + "'s Turn";
+			document.getElementById("displayMessage").innerHTML = "Go, " + firstPlayerName + "!";
 		}
 		// If it is first player's turn
 		else {
@@ -140,7 +142,7 @@ function cellClicked(cell_num, onlineUpdate) {
 			totalMovesList.push(cell_num);
 
 			// Update the display message so that it's the next player's turn
-			document.getElementById("displayMessage").innerHTML = secondPlayerName + "'s Turn";
+			document.getElementById("displayMessage").innerHTML = "Go, " + secondPlayerName + "!";
 		}
 
 		// Increase the count for turns
@@ -294,6 +296,7 @@ function checkFinish() {
 		if (firstPlayerMoves.includes(3)) {
 				document.getElementById("displayMessage").innerHTML = firstPlayerName + " Wins!";
 				endGame();
+				incrementScore(player1Score);
 				return true;
 		}
 		// If nobody has won...
@@ -471,7 +474,7 @@ function saveSettings() {
 		// Set the names based on user input
 		if (document.getElementById("p-one-name").value != ""){
 			firstPlayerName = document.getElementById("p-one-name").value;
-			document.getElementById("player1Name").innerText = `${document.getElementById("p-one-name").value}'s`;
+			document.getElementById("player1Name").innerText = `${document.getElementById("p-one-name").value}`;
 		}
 		else {
 			firstPlayerName = "Player One";
@@ -479,7 +482,7 @@ function saveSettings() {
 		if (gameMode == "PvP") {
 			if (document.getElementById("p-two-name").value != ""){
 				secondPlayerName = document.getElementById("p-two-name").value;
-				document.getElementById("player2Name").innerText = `${document.getElementById('p-two-name').value}'s`;
+				document.getElementById("player2Name").innerText = `${document.getElementById('p-two-name').value}`;
 			}
 			else {
 				secondPlayerName = "Player Two";
@@ -487,7 +490,7 @@ function saveSettings() {
 		}
 		else {
 			secondPlayerName = "Computer";
-			document.getElementById("player2Name").innerText = "Computer's";
+			document.getElementById("player2Name").innerText = secondPlayerName;
 		}
 	} 
 	else if (gameType == "Online") {
@@ -505,7 +508,7 @@ function saveSettings() {
 
 			if (document.getElementById("p-one-name").value != ""){
 				firstPlayerName = document.getElementById("p-one-name").value;
-				document.getElementById("player1Name").innerText = `${document.getElementById("p-one-name").value}'s`;
+				document.getElementById("player1Name").innerText = `${document.getElementById("p-one-name").value}`;
 			}
 			else {
 				firstPlayerName = "Player One";
@@ -532,7 +535,7 @@ function saveSettings() {
 			// use the player one name entered in modal for player two during online!
 			if (document.getElementById("p-one-name").value != ""){
 				secondPlayerName = document.getElementById("p-one-name").value;
-				document.getElementById("player2Name").innerText = `${document.getElementById("p-one-name").value}'s`;
+				document.getElementById("player2Name").innerText = `${document.getElementById("p-one-name").value}`;
 			}
 			else {
 				secondPlayerName = "Player Two";
