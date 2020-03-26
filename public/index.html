@@ -1,25 +1,167 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<title>Play Tic Tac Toe</title>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
-	</head>
+<head>
+	<meta charset="utf-8">
+  	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" type="text/css" href="css/style.css">
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
+</head>
 
-	<body>
-		<p>Welcome!</p>
-		<p id="notification"></p>
-		<form action="/play-local" method="post">
-			<button type="submit">Play Locally</button>
-		</form>
-		<form action="/create-room" method="post">
-			<input id="createRoom" name="roomName" type="text">
-			<button type='submit' onclick="createRoom()">Create Online Room</button>
-		</form>
-		<form action="/join-room" method="post">
-			<input id="joinRoom" type="text">
-			<button type='submit' onclick="joinRoom()">Join Online Room</button>
-		</form>
+<body>
+	<div class="container">
+		<div id="button-container">
+			<button id="settingButton" type="button" class="btn btn-primary btn-md" data-toggle="modal" data-target="#gameSettings">Change Game Settings</button>
+		</div>
+	
+	<div id="tableDiv">
+		<h3 id="displayMessage"></h3>
+		<table id="ticTable">
+			<tr>
+				<td id="0" onclick="cellClicked(0, false)" class="bottomBorder"></td>
+				<td id="1" onclick="cellClicked(1, false)" class="bottomBorder leftBorder"></td>
+				<td id="2" onclick="cellClicked(2, false)" class="bottomBorder leftBorder"></td>
+			</tr>
+			<tr>
+				<td id="3" onclick="cellClicked(3, false)" class="bottomBorder"></td>
+				<td id="4" onclick="cellClicked(4, false)" class="bottomBorder leftBorder"></td>
+				<td id="5" onclick="cellClicked(5, false)" class="bottomBorder leftBorder"></td>
+			</tr>
+			<tr>
+				<td id="6" onclick="cellClicked(6, false)"></td>
+				<td id="7" onclick="cellClicked(7, false)" class="leftBorder"></td>
+				<td id="8" onclick="cellClicked(8, false)" class="leftBorder"></td>
+			</tr>
+		</table>
+	</div>
 
-		<script src="js/room.js"></script>
-	</body>
+	<!-- SCORE TRACKER -->
+	<div id="scoreDivs">
+		
+		<div id="player1ScoreDiv" class="scoreDiv">
+			<p><span id="player1Name">Player One</span> Score: <span id="player1Score">0</span></p>
+		</div>
+		
+		<div id="player2ScoreDiv" class="scoreDiv">
+			<p><span id="player2Name">Player Two</span> Score: <span id="player2Score">0</span></p>
+		</div>
+	</div>
+
+	<!-- Modal -->
+	<div class="modal fade" id="gameSettings" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static">
+	  <div class="modal-dialog modal-dialog-centered" role="document">
+	    <div class="modal-content modal-fluid">
+	      <div class="modal-header">
+	        <h5 class="modal-title" id="exampleModalLabel">Game Settings</h5>
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	          <span aria-hidden="true">&times;</span>
+	        </button>
+	      </div>
+	      <form>
+	      <div class="modal-body">
+	      	<div class="form-group">
+	            <label class="col-form-label"><b>Game Type:</b></label><br>	         
+	            <div class="form-check">
+				  <input class="form-check-input" type="radio" name="gameType" id="Local" value="Local" checked onclick="formLocalSelected()">
+				  <label class="form-check-label" for="Local">Local</label>
+				</div>		
+				<div class="form-check">
+				  <input class="form-check-input" type="radio" name="gameType" id="Online" value="Online" onclick="formOnlineSelected()">
+				  <label class="form-check-label" for="Online">Online</label>
+				</div>		
+	        </div>
+
+	      	<div class="form-group localForm">
+	            <label class="col-form-label"><b>Play Against:</b></label><br>	         
+	            <div class="form-check">
+				  <input class="form-check-input" type="radio" name="gameSelect" id="PvP" value="PvP" checked onclick="formPlayerSelected()">
+				  <label class="form-check-label" for="PvP">Player</label>
+				</div>		
+				<div class="form-check">
+				  <input class="form-check-input" type="radio" name="gameSelect" id="PvE" value="PvE" onclick="formComputerSelected()">
+				  <label class="form-check-label" for="PvE">Computer</label>
+				</div>		
+	        </div>
+	        <div class="form-group formComputer">
+	        	<label class="col-form-label">Computer Difficulty:</label><br>
+	            <div class="form-check">
+				  <input class="form-check-input" type="radio" name="difficultySelect" id="Easy" value="Easy" checked>
+				  <label class="form-check-label" for="Easy">Easy</label>
+				</div>
+				<div class="form-check">
+				  <input class="form-check-input" type="radio" name="difficultySelect" id="Hard" value="Hard">
+				  <label class="form-check-label" for="Hard">Hard</label>
+				</div>
+	        </div>
+	        <div class="form-group">
+	            <label for="Player One Name" class="col-form-label"><b>Player One Name:</b></label>
+	            <input type="text" class="form-control" id="p-one-name" placeholder="Player One">
+	        </div>	             
+	        <div class="form-group formSecondPlayer localForm" >
+	            <label for="Player Two Name" class="col-form-label"><b>Player Two Name:</b></label>
+	            <input type="text" class="form-control" id="p-two-name" placeholder="Player Two">
+	        </div>
+	        <div class="form-group">
+	        	<img class="avatars" src="images/oddish.png" title="oddish">
+	        	<img class="avatars" src="images/snorlax.png" title="snorlax">
+	        	<img class="avatars" src="images/ditto.png" title="ditto">
+	        	<img class="avatars" src="images/eevee.png" title="eevee">
+	        	<img class="avatars" src="images/ghastly.png" title="ghastly">
+	        	<img class="avatars" src="images/meowth.png" title="meowth">
+	        	<img class="avatars" src="images/pikachu.png" title="pikachu">
+	        	<img class="avatars" src="images/pokeball.png" title="pokeball">	       	
+	        </div>
+					
+					<div class="form-group">
+	        	<label class="col-form-label"><b>Player One Avatar:</b></label>
+	        	<select id="pl1" class="custom-select" onchange="checkAvatar()">
+								<option value="0" selected>Default</option>
+								<option value="1">Oddish</option>
+								<option value="2">Snorlax</option>
+								<option value="3">Ditto</option>
+								<option value="4">Eevee</option>
+								<option value="5">Ghastly</option>
+								<option value="6">Meowth</option>
+								<option value="7">Pikachu</option>
+								<option value="8">Pokeball</option>
+					</select>
+	        </div>
+					
+					<div class="form-group localForm">
+	        	<label id="secondAvatarLabel" class="col-form-label"><b>Player Two Avatar:</b></label>
+	        	<select id="pl2" class="custom-select" onchange="checkAvatar()">
+							<option value="0">Default</option>
+							<option value="1">Oddish</option>
+							<option value="2">Snorlax</option>
+							<option value="3">Ditto</option>
+							<option value="4">Eevee</option>
+							<option value="5">Ghastly</option>
+							<option value="6">Meowth</option>
+							<option value="7">Pikachu</option>
+							<option value="8">Pokeball</option>
+					</select>
+	        </div>
+					
+					<div id="imageNotice">Pokemon icons made by <a href="https://www.flaticon.com/authors/darius-dan" title="Darius Dan">Darius Dan</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>	   
+	      </div>	          
+    	  </form>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+	        <button type="button" class="btn btn-primary" onclick="saveSettings()">Save changes</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+
+	<div class="fixed-bottom text-center" id="resetWrapper">
+		<input id = "resetButton" value="Reset Game" title="Reset Game" type="submit" class="button btn btn-secondary" onclick="resetGame(false)"> 
+	</div>
+	</div>
+
+
+	<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+	<script src="js/tictactoe.js"></script>
+</body>
 </html>

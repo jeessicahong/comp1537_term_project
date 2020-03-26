@@ -1,3 +1,11 @@
+let socket = io.connect('http://localhost:4000/');
+
+// store variable to keep track of which name/avatar to set when playing online
+let onlinePlayerNum;
+socket.on('connectSequence', function(data){
+	onlinePlayerNum = data;
+});
+
 // Variable to count the number of turns
 let turns = 1;
 // Boolean to track whether it is first player's turn
@@ -11,9 +19,10 @@ let avatarSrcArray = [
 let firstPlayerLogoSrc = avatarSrcArray[0];
 let secondPlayerLogoSrc = avatarSrcArray[1];
 
-// Store the type of game. Either PvP or PvE
+// Store the game mode. Either PvP or PvE
 let gameMode = '';
 let gameDifficulty = '';
+let gameType = '';
 
 // Flag to track and disable onclick functions when it is computer's turn
 let isComputerTurn = false;
@@ -24,6 +33,9 @@ let gameFinished;
 // Set default string for the names
 let firstPlayerName = "Player One";
 let secondPlayerName = "Player Two";
+
+let firstPlayerIndex;
+let secondPlayerIndex;
 
 // Store the index of table cells selected into a list
 // This array is mainly used for when it is PvE
@@ -69,8 +81,22 @@ function startGame() {
 	document.getElementById("displayMessage").innerHTML = firstPlayerName + "'s Turn";
 }
 
+// listen for updateBoard event to call cellClicked and update the tic tac toe
+socket.on('updateBoard', function(data){
+	cellClicked(data.cell_num, true);
+});
+
 // Function to handle each move
-function cellClicked(cell, cell_num) {
+function cellClicked(cell_num, onlineUpdate) {
+	// prevent the function from infinitely emit the event
+	// only emit if it is clicked on client side and not when received from server
+	if (!onlineUpdate){
+		socket.emit('updateBoard', {
+			cell_num: cell_num
+		});
+	}	
+	let cell_elem = document.getElementById(cell_num.toString());
+
 	// Create image elements in order to add them to the table later
 	let firstPlayerLogo = document.createElement('img');
 	firstPlayerLogo.className="avatars";
@@ -85,10 +111,10 @@ function cellClicked(cell, cell_num) {
 		// If it is second player or computer's turn
 		if (!firstPlayerTurn){
 			// Add the image to the table cell
-			cell.appendChild(secondPlayerLogo);
+			cell_elem.appendChild(secondPlayerLogo);
 
 			// Disable the onclick function for the cell
-			cell.onclick="";
+			cell_elem.onclick="";
 
 			// Update the secondPlayerMoves list using the movesMap
 			for (let i = 0; i < movesMap[cell_num].length; i++){
@@ -100,10 +126,10 @@ function cellClicked(cell, cell_num) {
 		// If it is first player's turn
 		else {
 			// Add the image to the table cell
-			cell.appendChild(firstPlayerLogo);
+			cell_elem.appendChild(firstPlayerLogo);
 
 			// Disable the onclick function for the cell
-			cell.onclick="";
+			cell_elem.onclick="";
 
 			// Update the firstPlayerMoves list using the movesMap
 			for (let i = 0; i < movesMap[cell_num].length; i++){
@@ -116,6 +142,7 @@ function cellClicked(cell, cell_num) {
 			// Update the display message so that it's the next player's turn
 			document.getElementById("displayMessage").innerHTML = secondPlayerName + "'s Turn";
 		}
+
 		// Increase the count for turns
 		turns++;
 
@@ -154,7 +181,7 @@ function toggleOnClicks() {
 		for (let i = 0; i < 9; i++){
 			if (!totalMovesList.includes(i)) {
 				let cell = document.getElementById(i.toString());
-				cell.onclick = function() {cellClicked(this, i)};
+				cell.onclick = function() {cellClicked(i, false)};
 			}
 		}
 	}
@@ -226,9 +253,7 @@ function computerTurn() {
 		}		
 	}
 		
-	// Get the cell element and pass to cellClicked function
-	let cell = document.getElementById(computerMove.toString());
-	cellClicked(cell, computerMove);
+	cellClicked(computerMove, false);
 	
 	// Update the moves array
 	totalMovesList.push(computerMove);
@@ -281,13 +306,21 @@ function checkFinish() {
 	return false;
 }
 
+socket.on('reset', function(){
+	resetGame(true);
+});
+
 // Function that resets all variables to their default values
-function resetGame() {
+function resetGame(onlineUpdate) {
+	if (!onlineUpdate){
+		socket.emit('reset');
+	}	
+
 	// Re-enable all the cells to have onclick functions
 	for (let i = 0; i < 3; i++){
 		for (let j = 0; j < 3; j++){
 			table.rows[i].cells[j].innerHTML = "";			
-			table.rows[i].cells[j].onclick= function() {cellClicked(this, i*3 + j)}
+			table.rows[i].cells[j].onclick= function() {cellClicked(i*3 + j, false)}
 		}
 	}
 
@@ -307,6 +340,22 @@ function endGame() {
 		for (let j = 0; j < 3; j++){
 			table.rows[i].cells[j].onclick=""
 		}
+	}
+}
+
+// Handle showing/hiding Game Setting form elements if Local game is selected
+function formLocalSelected() {
+	localFormElements = document.getElementsByClassName("localForm");
+	for (let i = 0; i < localFormElements.length; i++){
+		localFormElements[i].style.display = "";
+	}
+}
+
+// Handle showing/hiding Game Setting form elements if Online game is selected
+function formOnlineSelected() {
+	localFormElements = document.getElementsByClassName("localForm");
+	for (let i = 0; i < localFormElements.length; i++){
+		localFormElements[i].style.display = "none";
 	}
 }
 
@@ -350,61 +399,151 @@ function formPlayerSelected() {
 	secondAvatarLabel.innerHTML = "Player Two Avatar:";
 }
 
+// Listen for socket event to change the First Player Name and Avatar
+socket.on('setFirstPlayer', function(data) {
+	if (onlinePlayerNum == 2) {
+		firstPlayerName = data.firstPlayerName;
+		document.getElementById("player1Name").innerText = data.firstPlayerName + "\'s";
+
+		firstPlayerIndex = data.firstPlayerIndex;
+
+		if (firstPlayerIndex != 0) {
+			firstPlayerLogoSrc = avatarSrcArray[firstPlayerIndex - 1]
+			updatePlayerAvatarScoreTracker(player1ScoreDiv, firstPlayerLogoSrc);
+		} else {
+			firstPlayerLogoSrc = avatarSrcArray[0];
+			updatePlayerAvatarScoreTracker(player1ScoreDiv, firstPlayerLogoSrc);
+		}
+	}
+});
+
+// Listen for socket event to change the Second Player Name and Avatar
+socket.on('setSecondPlayer', function(data) {
+	if (onlinePlayerNum == 1) {
+		secondPlayerName = data.secondPlayerName;
+		document.getElementById("player2Name").innerText = data.secondPlayerName + "\'s";
+
+		secondPlayerIndex = data.secondPlayerIndex;
+		if (secondPlayerIndex != 0) {
+			secondPlayerLogoSrc = avatarSrcArray[secondPlayerIndex - 1]
+			updatePlayerAvatarScoreTracker(player2ScoreDiv, secondPlayerLogoSrc);
+		} else {
+			secondPlayerLogoSrc = avatarSrcArray[1];
+			updatePlayerAvatarScoreTracker(player2ScoreDiv, secondPlayerLogoSrc);
+		}
+	}
+});
+
 // Handle updates to Game Settings
 function saveSettings() {
-	// Set the avatars based on user selection
-	let firstPlayerAvatar = document.getElementById("pl1");
-	firstPlayerIndex = firstPlayerAvatar.options.selectedIndex;
-
-	if (firstPlayerIndex != 0) {
-		firstPlayerLogoSrc = avatarSrcArray[firstPlayerAvatar.options.selectedIndex - 1]
-		updatePlayerAvatarScoreTracker(player1ScoreDiv, firstPlayerLogoSrc);
-	} else {
-		firstPlayerLogoSrc = avatarSrcArray[0];
-		updatePlayerAvatarScoreTracker(player1ScoreDiv, firstPlayerLogoSrc);
-	}
-	
-	let secondPlayerAvatar = document.getElementById("pl2");
-	secondPlayerIndex = secondPlayerAvatar.options.selectedIndex;
-
-	if (secondPlayerIndex != 0) {
-		secondPlayerLogoSrc = avatarSrcArray[secondPlayerAvatar.options.selectedIndex - 1]
-		updatePlayerAvatarScoreTracker(player2ScoreDiv, secondPlayerLogoSrc);
-	} else {
-		secondPlayerLogoSrc = avatarSrcArray[1];
-		updatePlayerAvatarScoreTracker(player2ScoreDiv, secondPlayerLogoSrc);
-	}
-
-	// Set the names based on user input
-	if (document.getElementById("p-one-name").value != ""){
-		firstPlayerName = document.getElementById("p-one-name").value;
-		document.getElementById("player1Name").innerText = `${document.getElementById("p-one-name").value}'s`;
-	}
-	else {
-		firstPlayerName = "Player One";
-	}
-
 	// track the gameMode before it gets changed by user
 	let oldGameMode = gameMode;
 
 	//Set the second player name based on game mode
 	gameMode = document.querySelector('input[name="gameSelect"]:checked').value;
-
 	gameDifficulty = document.querySelector('input[name="difficultySelect"]:checked').value;
+	gameType = document.querySelector('input[name="gameType"]:checked').value;
 
-	if (gameMode == "PvP"){
-		if (document.getElementById("p-two-name").value != ""){
-			secondPlayerName = document.getElementById("p-two-name").value;
-			document.getElementById("player2Name").innerText = `${document.getElementById('p-two-name').value}'s`;
+	if (gameType == "Local") {
+		// Set the avatars based on user selection
+		let firstPlayerAvatar = document.getElementById("pl1");
+		firstPlayerIndex = firstPlayerAvatar.options.selectedIndex;
+
+		if (firstPlayerIndex != 0) {
+			firstPlayerLogoSrc = avatarSrcArray[firstPlayerAvatar.options.selectedIndex - 1]
+			updatePlayerAvatarScoreTracker(player1ScoreDiv, firstPlayerLogoSrc);
+		} else {
+			firstPlayerLogoSrc = avatarSrcArray[0];
+			updatePlayerAvatarScoreTracker(player1ScoreDiv, firstPlayerLogoSrc);
+		}
+		
+		let secondPlayerAvatar = document.getElementById("pl2");
+		secondPlayerIndex = secondPlayerAvatar.options.selectedIndex;
+
+		if (secondPlayerIndex != 0) {
+			secondPlayerLogoSrc = avatarSrcArray[secondPlayerAvatar.options.selectedIndex - 1]
+			updatePlayerAvatarScoreTracker(player2ScoreDiv, secondPlayerLogoSrc);
+		} else {
+			secondPlayerLogoSrc = avatarSrcArray[1];
+			updatePlayerAvatarScoreTracker(player2ScoreDiv, secondPlayerLogoSrc);
+		}
+
+		// Set the names based on user input
+		if (document.getElementById("p-one-name").value != ""){
+			firstPlayerName = document.getElementById("p-one-name").value;
+			document.getElementById("player1Name").innerText = `${document.getElementById("p-one-name").value}'s`;
 		}
 		else {
-			secondPlayerName = "Player Two";
+			firstPlayerName = "Player One";
 		}
-	}
-	else {
-		secondPlayerName = "Computer";
-		document.getElementById("player2Name").innerText = "Computer's";
-	}
+		if (gameMode == "PvP") {
+			if (document.getElementById("p-two-name").value != ""){
+				secondPlayerName = document.getElementById("p-two-name").value;
+				document.getElementById("player2Name").innerText = `${document.getElementById('p-two-name').value}'s`;
+			}
+			else {
+				secondPlayerName = "Player Two";
+			}
+		}
+		else {
+			secondPlayerName = "Computer";
+			document.getElementById("player2Name").innerText = "Computer's";
+		}
+	} 
+	else if (gameType == "Online") {
+		if (onlinePlayerNum == 1) {
+			let firstPlayerAvatar = document.getElementById("pl1");
+			firstPlayerIndex = firstPlayerAvatar.options.selectedIndex;
+
+			if (firstPlayerIndex != 0) {
+				firstPlayerLogoSrc = avatarSrcArray[firstPlayerAvatar.options.selectedIndex - 1]
+				updatePlayerAvatarScoreTracker(player1ScoreDiv, firstPlayerLogoSrc);
+			} else {
+				firstPlayerLogoSrc = avatarSrcArray[0];
+				updatePlayerAvatarScoreTracker(player1ScoreDiv, firstPlayerLogoSrc);
+			}
+
+			if (document.getElementById("p-one-name").value != ""){
+				firstPlayerName = document.getElementById("p-one-name").value;
+				document.getElementById("player1Name").innerText = `${document.getElementById("p-one-name").value}'s`;
+			}
+			else {
+				firstPlayerName = "Player One";
+			}
+			socket.emit('setFirstPlayer', {
+				firstPlayerName: firstPlayerName,
+				firstPlayerIndex: firstPlayerIndex
+			});
+		} 
+		// else... if onlinePlayerNum == 2
+		else {
+			// use the avatar selected as player one in modal for player two during online!
+			let secondPlayerAvatar = document.getElementById("pl1");
+			secondPlayerIndex = secondPlayerAvatar.options.selectedIndex;
+
+			if (secondPlayerIndex != 0) {
+				secondPlayerLogoSrc = avatarSrcArray[secondPlayerAvatar.options.selectedIndex - 1]
+				updatePlayerAvatarScoreTracker(player2ScoreDiv, secondPlayerLogoSrc);
+			} else {
+				secondPlayerLogoSrc = avatarSrcArray[1];
+				updatePlayerAvatarScoreTracker(player2ScoreDiv, secondPlayerLogoSrc);
+			}
+
+			// use the player one name entered in modal for player two during online!
+			if (document.getElementById("p-one-name").value != ""){
+				secondPlayerName = document.getElementById("p-one-name").value;
+				document.getElementById("player2Name").innerText = `${document.getElementById("p-one-name").value}'s`;
+			}
+			else {
+				secondPlayerName = "Player Two";
+			}
+
+			socket.emit('setSecondPlayer', {
+				secondPlayerName: secondPlayerName,
+				secondPlayerIndex: secondPlayerIndex
+			});
+		}
+	}	
 
 	//reset the score if gameMode changed
 	if (checkGameMode(oldGameMode, gameMode)) {
@@ -412,7 +551,7 @@ function saveSettings() {
 	}
 
 	$('#gameSettings').modal('hide');
-	resetGame();
+	resetGame(false);
 }
 
 // increment the player scores
@@ -457,14 +596,12 @@ function checkAvatar() {
 function updatePlayerAvatarScoreTracker(parentElement, image) {
 	
 	if(parentElement.querySelector("img") == null) {
-		console.log(parentElement);
 		imageElement = document.createElement("img");
 		imageElement.className = "scoreImg";
 		imageElement.src = image;
 		parentElement.insertBefore(imageElement, parentElement.childNodes[1]);
 	} else {
 		parentElement.removeChild(parentElement.childNodes[1]);
-		console.log(parentElement);
 		imageElement = document.createElement("img");
 		imageElement.className = "scoreImg";
 		imageElement.src = image;

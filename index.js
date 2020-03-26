@@ -1,9 +1,6 @@
 var express = require('express');
 var socket = require('socket.io');
 
-// Socket setup
-var io = socket(server);
-
 // App setup
 var app = express();
 var bodyParser = require('body-parser');
@@ -18,27 +15,37 @@ var server = app.listen(PORT, () => {
 // Static files
 app.use(express.static('public'));
 
-app.post('/play-local', (req, res) => {
-	res.redirect('/game');
-});
+// Socket setup
+var io = socket(server);
 
-app.get('/game', (req, res) => {
-	res.sendFile(__dirname + '/public/game.html');
-});
-
-app.post('/create-room', (req, res) => {
-	// var roomName = JSON.stringify(req.body.roomName);
-	// console.log(roomName);
-
-	res.sendFile(__dirname + '/public/game.html');
-});
+var connectSequence = 1;
 
 //listen for event when connection from client browser
 io.on('connection', function(socket){
 	console.log("made socket connection", socket.id);
 
-	socket.on('room', function(room){
-		socket.join(room);
-		io.sockets.in(room).emit("connectRoom" , "New user has joined room: " + room);
+	if (connectSequence == 1) {
+		socket.emit('connectSequence', connectSequence);
+		connectSequence = 2;
+	}
+	else {
+		socket.emit('connectSequence', connectSequence);
+		connectSequence = 1;
+	}
+
+	socket.on('updateBoard', function(data){
+		socket.broadcast.emit('updateBoard', data);
 	});
+
+	socket.on('reset', function() {
+		socket.broadcast.emit('reset');
+	});
+
+	socket.on('setFirstPlayer', function(data) {
+		socket.broadcast.emit('setFirstPlayer', data);
+	});
+
+	socket.on('setSecondPlayer', function(data) {
+		socket.broadcast.emit('setSecondPlayer', data);
+	})
 });
