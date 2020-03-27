@@ -5,6 +5,7 @@
   	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" type="text/css" href="css/style.css">
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
 	<link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
 	<title>Tic Tac Toe! -JKLV-</title>
 </head>
@@ -19,19 +20,19 @@
 		<h3 id="displayMessage"></h3>
 		<table id="ticTable">
 			<tr>
-				<td id="0" onclick="cellClicked(this, 0)" class="bottomBorder"></td>
-				<td id="1" onclick="cellClicked(this, 1)" class="bottomBorder leftBorder"></td>
-				<td id="2" onclick="cellClicked(this, 2)" class="bottomBorder leftBorder"></td>
+				<td id="0" onclick="cellClicked(0, false)" class="bottomBorder"></td>
+				<td id="1" onclick="cellClicked(1, false)" class="bottomBorder leftBorder"></td>
+				<td id="2" onclick="cellClicked(2, false)" class="bottomBorder leftBorder"></td>
 			</tr>
 			<tr>
-				<td id="3" onclick="cellClicked(this, 3)" class="bottomBorder"></td>
-				<td id="4" onclick="cellClicked(this, 4)" class="bottomBorder leftBorder"></td>
-				<td id="5" onclick="cellClicked(this, 5)" class="bottomBorder leftBorder"></td>
+				<td id="3" onclick="cellClicked(3, false)" class="bottomBorder"></td>
+				<td id="4" onclick="cellClicked(4, false)" class="bottomBorder leftBorder"></td>
+				<td id="5" onclick="cellClicked(5, false)" class="bottomBorder leftBorder"></td>
 			</tr>
 			<tr>
-				<td id="6" onclick="cellClicked(this, 6)"></td>
-				<td id="7" onclick="cellClicked(this, 7)" class="leftBorder"></td>
-				<td id="8" onclick="cellClicked(this, 8)" class="leftBorder"></td>
+				<td id="6" onclick="cellClicked(6, false)"></td>
+				<td id="7" onclick="cellClicked(7, false)" class="leftBorder"></td>
+				<td id="8" onclick="cellClicked(8, false)" class="leftBorder"></td>
 			</tr>
 		</table>
 	</div>
@@ -47,7 +48,7 @@
 			<p class="card-text"><span id="player2Name">Player Two</span>: <span id="player2Score">0</span></p>
 		  </div>
 		</div>
-	  </div>
+  	</div>
 
 	<!-- Modal -->
 	<div class="modal fade" id="gameSettings" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static">
@@ -62,6 +63,18 @@
 	      <form>
 	      <div class="modal-body">
 	      	<div class="form-group">
+	            <label class="col-form-label"><b>Game Type:</b></label><br>	         
+	            <div class="form-check">
+				  <input class="form-check-input" type="radio" name="gameType" id="Local" value="Local" checked onclick="formLocalSelected()">
+				  <label class="form-check-label" for="Local">Local</label>
+				</div>		
+				<div class="form-check">
+				  <input class="form-check-input" type="radio" name="gameType" id="Online" value="Online" onclick="formOnlineSelected()">
+				  <label class="form-check-label" for="Online">Online</label>
+				</div>		
+	        </div>
+
+	      	<div class="form-group localForm">
 	            <label class="col-form-label"><b>Play Against:</b></label><br>	         
 	            <div class="form-check">
 				  <input class="form-check-input" type="radio" name="gameSelect" id="PvP" value="PvP" checked onclick="formPlayerSelected()">
@@ -87,7 +100,7 @@
 	            <label for="Player One Name" class="col-form-label"><b>Player One Name:</b></label>
 	            <input type="text" class="form-control" id="p-one-name" placeholder="Player One">
 	        </div>	             
-	        <div class="form-group formSecondPlayer" >
+	        <div class="form-group formSecondPlayer localForm" >
 	            <label for="Player Two Name" class="col-form-label"><b>Player Two Name:</b></label>
 	            <input type="text" class="form-control" id="p-two-name" placeholder="Player Two">
 	        </div>
@@ -117,7 +130,7 @@
 					</select>
 	        </div>
 					
-					<div class="form-group">
+					<div class="form-group localForm">
 	        	<label id="secondAvatarLabel" class="col-form-label"><b>Player Two Avatar:</b></label>
 	        	<select id="pl2" class="custom-select" onchange="checkAvatar()">
 							<option value="0">Default</option>
@@ -144,7 +157,7 @@
 	</div>
 
 	<div class="fixed-bottom text-center" id="resetWrapper">
-		<input id = "resetButton" value="Reset Game" title="Reset Game" type="submit" class="button btn btn-secondary" onclick="resetGame()"> 
+		<input id = "resetButton" value="Reset Game" title="Reset Game" type="submit" class="button btn btn-secondary" onclick="resetGame(false)"> 
 	</div>
 	</div>
 
