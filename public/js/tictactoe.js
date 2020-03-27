@@ -97,6 +97,20 @@ function cellClicked(cell_num, onlineUpdate) {
 			cell_num: cell_num
 		});
 	}	
+
+	if (onlinePlayerNum == 1){
+		socket.emit('setFirstPlayer', {
+			firstPlayerName: firstPlayerName,
+			firstPlayerIndex: firstPlayerIndex
+		});	
+	} 
+	else if (onlinePlayerNum == 2) {
+		socket.emit('setSecondPlayer', {
+			secondPlayerName: secondPlayerName,
+			secondPlayerIndex: secondPlayerIndex
+		});
+	}	
+
 	let cell_elem = document.getElementById(cell_num.toString());
 
 	// Create image elements in order to add them to the table later
