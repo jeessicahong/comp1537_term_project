@@ -406,7 +406,7 @@ function formPlayerSelected() {
 socket.on('setFirstPlayer', function(data) {
 	if (onlinePlayerNum == 2) {
 		firstPlayerName = data.firstPlayerName;
-		document.getElementById("player1Name").innerText = data.firstPlayerName + "\'s";
+		document.getElementById("player1Name").innerText = data.firstPlayerName;
 
 		firstPlayerIndex = data.firstPlayerIndex;
 
@@ -424,7 +424,7 @@ socket.on('setFirstPlayer', function(data) {
 socket.on('setSecondPlayer', function(data) {
 	if (onlinePlayerNum == 1) {
 		secondPlayerName = data.secondPlayerName;
-		document.getElementById("player2Name").innerText = data.secondPlayerName + "\'s";
+		document.getElementById("player2Name").innerText = data.secondPlayerName;
 
 		secondPlayerIndex = data.secondPlayerIndex;
 		if (secondPlayerIndex != 0) {
