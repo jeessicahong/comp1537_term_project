@@ -1,4 +1,5 @@
-let socket = io.connect('http://localhost:4000/');
+// let socket = io.connect('http://localhost:4000/');
+let socket = io.connect('https://tic-tac-toe-1537.herokuapp.com/');
 
 // store variable to keep track of which name/avatar to set when playing online
 let onlinePlayerNum;
